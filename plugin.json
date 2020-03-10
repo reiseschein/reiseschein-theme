@@ -1,0 +1,42 @@
+{
+    "version"           : "4.1.1",
+    "name"              : "reiseschein",
+    "description"       : "reiseschein",
+    "author"            : "Frontend Studios GmbH",
+    "license"           : "AGPL-3.0",
+    "pluginIcon"        : "icon_plugin_xs.png",
+    "price"             : 0.00,
+    "shortDescription"  : {"de": "reiseschein","en":"reiseschein"},
+    "authorIcon"        : "icon_author_xs.png",
+    "categories"        : ["3518"],
+    "email"             : "dev@frontend-studios.de",
+    "phone"             : "+49 40 851 792 84 30",
+    "keywords"          : ["plentymarkets", "plugins", "layout", "theme", "ceres", "frontend studios"],
+    "type"              : "theme",
+    "require"           : ["Ceres", "IO"],
+    "namespace"         : "reiseschein",
+    "serviceProvider"   : "reiseschein\\Providers\\reisescheinServiceProvider",
+    "dataProviders"     :
+    [
+        {
+            "key":"reiseschein\\Containers\\reiseschein",
+            "name":"reiseschein",
+            "description":"reiseschein"
+        },
+        {
+            "key":"reiseschein\\Containers\\reisescheinScripts",
+            "name":"reisescheinreisescheinScripts",
+            "description":"reisescheinreisescheinScripts"
+        },
+        {
+            "key":"reiseschein\\Containers\\homekonfi",
+            "name":"reisescheinHomeKonfi",
+            "description":"Startseite Konfigurator"
+        },
+        {
+            "key":"reiseschein\\Containers\\reisescheinTracking",
+            "name":"reisescheinTracking",
+            "description":"Tracking Codes"
+        }
+    ]
+}

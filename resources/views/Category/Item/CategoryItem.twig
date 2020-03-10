@@ -1,0 +1,215 @@
+{% extends getPartial('page-design') %}
+{% import "Ceres::PageDesign.Macros.LayoutContainer" as LayoutContainer %}
+{% import "Ceres::Category.Macros.CategoryTree" as Tree %}
+
+{% set overrideSearchFilters = LayoutContainer.show("Ceres::Search.Filter", facets ) %}
+
+{% block PageBody %}
+
+    {{ component( "reiseschein::ItemList.Components.CategoryItem") }}
+    {{ component( "Ceres::ItemList.Components.Filter.ItemFilterList") }}
+    {{ component( "Ceres::ItemList.Components.Filter.ItemFilterTagList") }}
+
+    {% if category is defined and ceresConfig.item.showCategoryImage %}
+        {% include "reiseschein::Category.Item.Partials.CategoryParallaxImage" with { 'category': category } %}
+    {% endif %}
+
+    <div class="categoriegrid page-content container-max">
+
+        {% if category is not defined and itemList is not empty %}
+            <div class="row mt-3">
+                <div class="col-12">
+                    <h1 class="h2" id="searchPageTitle">{{ trans("Ceres::Template.itemSearchResults") }} {{ searchString }}</h1>
+                </div>
+            </div>
+        {% endif %}
+
+        {% if category is defined and not ceresConfig.item.showCategoryImage %}
+            <div class="row mt-3">
+                <div class="col-12">
+                    <h1 class="h2 category-title">{{ category.details[0].name }}</h1>
+                    {% if ceresConfig.item.showCategoryDescriptionTop in ["description1", "both"] and category.details[0].description | trim is not empty %}
+                        <div class="category-description mb-3">{{ category.details[0].description | raw }}</div>
+                    {% endif %}
+                    {% if ceresConfig.item.showCategoryDescriptionTop in ["description2", "both"] and category.details[0].description2 | trim is not empty %}
+                        <div class="category-description mb-3">{{ category.details[0].description2 | raw }}</div>
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+
+        <div class="list-controls">
+            <div class="list-controls-inner">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="list-wrapper">
+                            {% include "Ceres::Category.Item.Partials.ItemSorting" with { 'sortingData': searchOptions.sorting, 'selectedSorting': itemSorting } %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {# TAGS #}
+            <item-filter-tag-list></item-filter-tag-list>
+        </div>
+
+        {% if ceresConfig.pagination.position in ['top', 'top_bottom'] %}
+            <div class="list-controls row">
+                <div class="col-12">
+                    {% include "reiseschein::Category.Item.Partials.Pagination" %}
+                </div>
+            </div>
+        {% endif %}
+
+        <div class="row">
+
+            {% if category is defined and ceresConfig.header.showNavBars in ["side", "both"] %}
+                <div class="col hidden-md-down sidebar-categories-wrapper">
+                    <div class="sidebar-categories">
+                        <div class="category-title">{{ trans("Ceres::Template.itemCategories") }}</div>
+                        {{ include('Ceres::PageDesign.Partials.Header.SideNavigation.twig') }}
+                    </div>
+
+                    {{ LayoutContainer.show("Ceres::CategoryItem.SideNavBarBottom") }}
+                </div>
+
+            {% endif %}
+
+            <div class="col">
+                {% if overrideSearchFilters | trim is empty %}
+                    <item-filter-list :facet-data="{{ facets | json_encode }}">
+                        {% if facets | length > 0 %}
+                            <a class="btn btn-link filter-toggle" href="#filterCollapse">
+                                <i class="fa fa-sliders default-float" aria-hidden="true"></i> {{ trans("Ceres::Template.itemFilter") }}
+                            </a>
+                        {% endif %}
+                    </item-filter-list>
+                {% else %}
+                    {{ overrideSearchFilters }}
+                {% endif %}
+                {% if itemList is not empty %}
+	                <ul class="product-list row grid px-sm-3 px-lg-0">
+	                    {% for item in itemList %}
+                            {% set freevar = getFree(item.data.item.id) %}
+                            {% set freeArray = freevar.free17|split('[') %}
+                            {% set catName = '' %}
+                            {% set persons = '' %}
+                            {% set nights = '' %}
+                            {% set food = '' %}
+                            {% set valid = '' %}
+                            {% set icons = '' %}
+                            {% set iconsArray = '' %}
+                            {% set stars = '' %}
+                            {% set prices = '' %}
+                            {% set pricesArray = '' %}
+
+                            {% for free in freeArray %}
+                                {% if free starts with '2]' %}{% set catName = free[2:] %}{% endif %}
+                                {% if free starts with '3]' %}{% set persons = free[2:] %}{% endif %}
+                                {% if free starts with '4]' %}{% set nights = free[2:] %}{% endif %}
+                                {% if free starts with '5]' %}{% set food = free[2:] %}{% endif %}
+                                {% if free starts with '6]' %}{% set valid = free[2:] %}{% endif %}
+                                {% if free starts with '8]' %}{% set icons = free[2:] %}{% set iconsArray = icons|split(',') %}{% endif %}
+                                {% if free starts with '9]' %}{% set stars = free[2:] %}{% endif %}
+                                {% if free starts with '10]' %}{% set prices = free[3:] %}{% set pricesArray = prices|split(',') %}{% endif %}
+                            {% endfor %}
+
+
+
+	                        <li class="col-12 col-sm-6 col-lg-6 col-xl-{% if services.template.isSearch() %}3{% else %}4{% endif %} cat-item">
+                                {% set hcItem = services.item.getItem( item.data.item.id ) %}
+                                <div class="hcItem{% if not hcItem.documents[0].data.variation.weightNetG > 0 %} hcItem-none{% endif %} d-none">{{ hcItem.documents[0].data.variation.weightNetG }}</div>
+                                <div class="d-none pricesArray">
+                                    {% for price in pricesArray %}
+                                        Preis {{ loop.index }}: {{ price }}<br />
+                                    {% endfor %}
+                                </div>
+                                <span class="d-none persons-temp">{{ persons }}</span>
+                                <span class="d-none nights-temp">{{ nights }}</span>
+                                <span class="d-none food-temp">{{ food }}</span>
+                                <span class="d-none valid-temp">{{ valid }}</span>
+
+                                {% for icon in iconsArray %}
+                                <span class="d-none">
+                                    {% if icon == 1 %}<item-lazy-img ref="itemLazyImage" template="#vue-item-lazy-img" alt="WLAN Icon" class="icons-wlan-temp img-fluid" image-url="https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/FS_assets/wlan.svg"></item-lazy-img>{% endif %}
+                                    {% if icon == 2 %}<item-lazy-img ref="itemLazyImage" template="#vue-item-lazy-img" alt="Restaurant Icon" class="icons-restaurant-temp img-fluid" image-url="https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/FS_assets/restaurant.svg"></item-lazy-img>{% endif %}
+                                    {% if icon == 3 %}<item-lazy-img ref="itemLazyImage" template="#vue-item-lazy-img" alt="Bar Icon" class="icons-bar-temp img-fluid" image-url="https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/FS_assets/bar2.svg"></item-lazy-img>{% endif %}
+                                    {% if icon == 4 %}<item-lazy-img ref="itemLazyImage" template="#vue-item-lazy-img" alt="Spa und Wellness Icon" class="icons-spa-temp img-fluid" image-url="https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/FS_assets/spa.svg"></item-lazy-img>{% endif %}
+                                    {% if icon == 5 %}<item-lazy-img ref="itemLazyImage" template="#vue-item-lazy-img" alt="Pool Icon" class="icons-pool-temp img-fluid" image-url="https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/FS_assets/pool.svg"></item-lazy-img>{% endif %}
+                                    {% if icon == 6 %}<item-lazy-img ref="itemLazyImage" template="#vue-item-lazy-img" alt="Fitness Icon" class="icons-fitness-temp img-fluid" image-url="https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/FS_assets/fitness.svg"></item-lazy-img>{% endif %}
+                                    {% if icon == 7 %}<item-lazy-img ref="itemLazyImage" template="#vue-item-lazy-img" alt="Parkplatz Icon" class="icons-parkplatz-temp img-fluid" image-url="https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/FS_assets/parkplatz.svg"></item-lazy-img>{% endif %}
+                                    {% if icon == 8 %}<item-lazy-img ref="itemLazyImage" template="#vue-item-lazy-img" alt="24 Stunden Icon" class="icons-24h-temp img-fluid" image-url="https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/FS_assets/24h.svg"></item-lazy-img>{% endif %}
+                                    {% if icon == 9 %}<item-lazy-img ref="itemLazyImage" template="#vue-item-lazy-img" alt="Fahrstuhl Icon" class="icons-fahrstuhl-temp img-fluid" image-url="https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/FS_assets/fahrstuhl.svg"></item-lazy-img>{% endif %}
+                                    {% if icon == 10 %}<item-lazy-img ref="itemLazyImage" template="#vue-item-lazy-img" alt="Haustiere Icon" class="icons-haustiere-temp img-fluid" image-url="https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/FS_assets/haustiere.svg"></item-lazy-img>{% endif %}
+                                </span>
+                                {% endfor %}
+
+                                <div class="list-box-topbar px-2 px-md-4 py-2 d-flex justify-content-between">
+    								<div class="list-box-topbar-left">
+    									<strong>{{ catName }}</strong>
+    								</div>
+    								<div class="list-box-topbar-right small">
+    									<span class="stars stars_{{ stars }}"></span>
+    								</div>
+    							</div>
+	                            <category-item
+	                                item-data-ref="{{ item.data | json_data }}"
+	                                :decimal-count="{{ ceresConfig.item.storeSpecial }}">
+	                                <template #before-prices>{{ LayoutContainer.show("Ceres::CategoryItem.BeforePrices", item.data) }}</template>
+	                                <template #after-prices>{{ LayoutContainer.show("Ceres::CategoryItem.AfterPrices", item.data) }}</template>
+
+	                                <a href="{{ item.data | itemURL }}" class="small">
+	                                    <i class="fa fa-image"></i>
+	                                    <span>{{ item.data | itemName }}</span>
+	                                </a>
+	                            </category-item>
+	                        </li>
+	                    {% endfor %}
+	                </ul>
+                {% endif %}
+
+                {% if category is not defined and itemList is empty %}
+                    <p class="h3 text-muted mb-5 text-center">{{ trans("Ceres::Template.itemSearchNoResults", {"searchString": searchString}) }}</p>
+                {% endif %}
+            </div>
+        </div>
+
+        {% if ceresConfig.pagination.position in ['bottom', 'top_bottom'] %}
+            <div class="list-controls mb-5 row">
+                <div class="col-12">
+                    {% include "reiseschein::Category.Item.Partials.Pagination" %}
+                </div>
+            </div>
+        {% endif %}
+
+        {% if category is defined %}
+            <div class="col-12 text-justify pb-5">
+                {% if ceresConfig.item.showCategoryDescriptionBottom in ["description1", "both"] and category.details[0].description | trim is not empty %}
+                    <div class="category-description mb-5">{{ category.details[0].description | raw }}</div>
+                {% endif %}
+                {% if ceresConfig.item.showCategoryDescriptionBottom in ["description2", "both"] and category.details[0].description2 | trim is not empty %}
+                    <div class="category-description mb-5">{{ category.details[0].description2 | raw }}</div>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+
+{% endblock %}
+
+{% block PartialHead %}
+    {% set canonicalUrl = services.url.getCanonicalURL() %}
+    {% if currentPage - 1 > 0 %}
+        <link rel="prev" href="{{ canonicalUrl ~ queryString({'page': currentPage - 1}) }}" />
+    {% endif %}
+
+    {% if currentPage + 1 <= pageMax %}
+        <link rel="next" href="{{ canonicalUrl ~ queryString({'page': currentPage + 1}) }}" />
+    {% endif %}
+
+    {% embed getPartial('page-metadata') %}
+        {% if category is not defined %}
+            {% block title      trans("Ceres::Template.itemSearchResults") ~ " " ~ searchString %}
+            {% block robots     ceresConfig.meta.robotsSearchResult %}
+        {% endif %}
+    {% endembed %}
+{% endblock %}

@@ -1,0 +1,38 @@
+{{ component( "Ceres::Item.Components.QuantityInput" ) }}
+<transition-group name="wish-list-item-transition" tag="div">
+    <article v-for="(wishListItem, index) in wishListItems" :key="wishListItem.id" class="wish-list-item-custom py-5 pr-5" :id="'article_' + index ">
+
+        <div class="row">
+            <div class="col-3 wish-list-container-custom">
+                <div class="wish-list-image-container-custom">
+                    <a :href="wishListItem.data | itemURL">
+                        <img class="img-fluid wish-list-image-custom" :src="wishListItem.data.images | itemImages('urlMiddle') | itemImage" :alt="wishListItem.data | itemName" :title="wishListItem.data | itemName">
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-4 wish-list-texts">
+                <a :href="wishListItem.data | itemURL">
+                    <h2 class="h5 wish-list-name text-dark">${ wishListItem.data | itemName }</h2>
+                </a>
+                <span class="d-block small text-muted font-weight-bold">${ wishListItem.data.item.manufacturer.externalName }</span>
+                <span class="d-block small text-muted font-weight-bold">Artikel-Nr.: ${ wishListItem.data.item.id }</span>
+            </div>
+
+            <div class="col-4 col-lg-2 offset-lg-3 wish-list-container-custom">
+                <div class="row">
+                    <div class="col-12 d-flex justify-content-between">
+                        <div class="h2 font-weight-bold wish-list-price">${ wishListItem.data.prices.default.unitPrice.value | currency(wishListItem.data.prices.default.currency) }</div>
+                        <div class="h2 wish-list-remove" @click="removeItem({id: wishListItem.data.variation.id, wishListItem: wishListItem, index: index})"><i class="fa fa-trash" aria-hidden="true"></i></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <a class="btn btn-primary btn-block mt-3" :href="wishListItem.data | itemURL">DETAILANSICHT</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </article>
+</transition-group>

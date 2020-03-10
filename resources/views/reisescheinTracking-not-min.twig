@@ -1,0 +1,134 @@
+{# STARTSEITE #}
+
+{% if services.template.getCurrentTemplate() == 'tpl.home' %}
+	<script async type="text/plain" data-usercentrics="Adcell" src="//www.adcell.de/js/inlineretarget.js?method=track&pid=6199&type=startpage"></script>
+{% endif %}
+
+
+{# Kategorieseite #}
+
+{% if services.template.getCurrentTemplate() == 'tpl.category.item' %}
+	{% set itemTrackList = services.itemList.getItemList("category", category.id) %}
+	{% set itemArray = [] %}
+	{# set itemArray = itemArray|push(item.data.item.id) #}
+	<script async type="text/plain" data-usercentrics="Adcell" src="//www.adcell.de/js/inlineretarget.js?method=category&pid=6199&categoryName={{ category.details[0].name }}&categoryId={{ category.id }}&productIds={% for item in itemTrackList.documents %}{{ item.data.item.id }},{% endfor %}&productSeparator=,"></script>
+{% endif %}
+
+
+{# ARTIKELSEITE #}
+
+{% if services.template.getCurrentTemplate() == 'tpl.item' %}
+	{% set freeArrayTrack = themeItem.free17|split('[') %}
+	{% set moreItemsTrack = '' %}
+	{% set moreItemsArrayTrack = '' %}
+	{% for free in freeArrayTrack %}
+	    {% if free starts with '1]' %}{% set moreItemsTrack = free[2:] %}{% set moreItemsArrayTrack = moreItemsTrack|split(',') %}{% endif %}
+	{% endfor %}
+	<script async type="text/plain" data-usercentrics="Adcell" src="//www.adcell.de/js/inlineretarget.js?method=product&pid=6199&productId={{ item.documents[0].data.item.id }}&productName={{ item.documents[0].data.texts.name1 }}&categoryId={{ item.documents[0].data.defaultCategories[0].id }}&productIds={% for item in moreItemsArrayTrack %}{{ item }},{% endfor %}&productSeparator=,"></script>
+{% endif %}
+
+
+{# SUCHERGEBNISSEITE #}
+
+{% if services.template.getCurrentTemplate() == 'tpl.search' %}
+	<script async type="text/plain" data-usercentrics="Adcell" src="//www.adcell.de/js/inlineretarget.js?method=search&pid=6199&search={{ searchString }}&productIds={% for item in itemList %}{{ item.data.item.id }},{% endfor %}&productSeparator=,"></script>
+{% endif %}
+
+
+{# WARENKORB #}
+
+{% if services.template.getCurrentTemplate() == 'tpl.basket' %}
+	{% set basketItems = services.basket.getBasketItemsForTemplate() %}
+	<script async type="text/plain" data-usercentrics="Adcell" src="//www.adcell.de/js/inlineretarget.js?method=basket&pid=6199&productIds={% for item in basketItems %}{{ item.itemId }},{% endfor %}&productSeparator=,&quantities={% for item in basketItems %}{{ item.quantity }},{% endfor %}&basketProductCount={{ basket.itemQuantity }}&basketTotal={{ basket.itemSum }}"></script>
+{% endif %}
+
+
+{# BESTELLBESTAETIGUNG #}
+
+{% if services.template.getCurrentTemplate() == 'tpl.confirmation' %}
+
+	<script async type="text/plain" data-usercentrics="Adcell" src="//www.adcell.de/js/inlineretarget.js?method=checkout&pid=6199&basketId={{ data.order.id }}&basketTotal={{ data.totals.totalNet }}&basketProductCount={{ data.order.orderItems|length }}&productIds=[commaSeparatedProductIds]&productSeparator=[separatorBetweenProductIds]&quantities=[commaSeparatedQuantities]"></script>
+
+	<!-- BEGIN GCR Opt-in Module Code -->
+	<script  type="text/plain" data-usercentrics="Optin" src="https://apis.google.com/js/platform.js?onload=renderOptIn"></script>
+	<script  type="text/plain" data-usercentrics="Optin">
+	window.renderOptIn = function() {
+	window.gapi.load('surveyoptin', function() {
+	window.gapi.surveyoptin.render(
+	{
+	// REQUIRED
+	"merchant_id":"111319904",
+	"order_id": "{{ data.order.id }}",
+	"email": "{{ data.order.billingAddress.options[0].value }}",
+	"delivery_country": "DE",
+	"estimated_delivery_date": "{{ "now" | date("d.m.Y") }}", // OPTIONAL
+	"opt_in_style": "CENTER_DIALOG"
+	});
+	});
+	}
+	</script>
+	<!-- END GCR Opt-in Module Code -->
+
+	<!-- Google Tag Manager eCommerce-->
+	{% set transTax = data.totals.totalGross - data.totals.totalNet %}
+	<script async type="text/plain" data-usercentrics="GTM eCommerce"> 
+	dataLayer =	[{ 
+		'event': 'transactionReiseschein',
+		"transactionId":"{{ data.order.id }}", 
+		"transactionDate":"{{ "now" | date("d.m.Y") }}",
+		"transactionTotal":{{ data.totals.totalNet }}, 
+		"transactionShipping":{{ data.totals.shippingNet }}, 
+		"transactionTax":{{ transTax }},
+		"transactionPaymentType":'{{ data.paymentMethodName }}',
+		"transactionCurrency":'EUR',
+		"productId": '{% for item in data.order.orderItems %}{{ item.id }}{% if not loop.last %},{% endif %}{% endfor %}',
+		"transactionProducts":[{% for item in data.order.orderItems %}{
+		'sku': '{{ item.id }}',
+		'productId': '{{ item.id }}',
+		'name': '{{ item.orderItemName }}',
+		'category': '', 
+		'price': {{ item.amounts[0].priceNet }}, 
+		'quantity': {{ item.quantity }}}{% if not loop.last %},{% endif %}{% endfor %}
+		]
+ 	}]; 
+	</script>
+
+	<!-- Google Code for Kauf Conversion Page -->
+	<script async type="text/plain" data-usercentrics="Google Conversion">
+		/* <![CDATA[ */
+		var google_conversion_id = 939186686;
+		var google_conversion_language = "de";
+		var google_conversion_format = "3";
+		var google_conversion_color = "ffffff";
+		var google_conversion_label = "HOA5CJKe2m8Q_rPrvwM";
+		var google_conversion_value = {{ data.totals.totalNet }};
+		var google_conversion_currency = "EUR";
+		var google_remarketing_only = false;
+		/* ]]> */
+	</script>
+	<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js"></script>
+	<noscript><div style="display:inline;"><img height="1" width="1" style="border-style:none;" alt="" src="//www.googleadservices.com/pagead/conversion/939186686/?value={{ data.totals.totalNet }}&currency_code=EUR&label=HOA5CJKe2m8Q_rPrvwM&guid=ON&script=0"/></div></noscript>
+
+	<!-- Start: N3M Tracking -->
+	<script  id="pap_x2s6df8d" src="https://work.selecdoo.com/scripts/kzda5vhjq8" async type="text/plain" data-usercentrics="N3M Tracking"></script>
+	<script async type="text/javascript">
+		PostAffTracker.setAccountId('190f8ee3');
+		var sale = PostAffTracker.createSale();
+		sale.setTotalCost('{{ data.totals.totalNet }}');
+		sale.setOrderID('{{ data.order.id }}');
+		sale.setProductID('{% for item in data.order.orderItems %}{{ item.id }}{% if not loop.last %},{% endif %}{% endfor %}');
+		sale.setCampaignID('b4e48863');
+		sale.setStatus('P');
+		 
+		PostAffTracker.register();
+	</script>
+	<!-- END: N3M Tracking -->
+
+{% endif %}
+
+
+{# KASSE #}
+
+{% if services.template.getCurrentTemplate() == 'tpl.checkout' %}
+
+{% endif %}

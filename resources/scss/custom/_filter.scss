@@ -1,0 +1,264 @@
+.selected-filters { display : none!important; }
+.filter-wrapper {
+	display : block;
+	.card-columns {
+		display 	: flex;
+	    flex-wrap 	: wrap;
+	    margin-right: -.5rem;
+	    justify-content: space-between;
+	}
+	.card {
+		flex 	: 1 0 100%;
+		margin 	: 0 0 1rem 0!important;
+		padding : 0 .5rem 0 0!important;
+
+
+		.h3 {
+			border 		: 1px solid $gray-light;
+			font-size 	: 1rem;
+			line-height : 2;
+			margin 		: 0;
+			padding 	: .5rem 1rem;
+			background 	: $white;
+
+			&:hover { cursor: pointer; }
+
+		    &:after {
+		    	display 	: block;
+		    	content 	: "\F078";
+		    	float 		: right;
+		    	font-family : "FontAwesome";
+		    	margin-left : .5rem;
+		    	transition 	: transform .3s ease-in-out;
+		    }
+		    &.active:after {
+		    	content 	: "\f00d";
+		    	transform 	: rotate(180deg);
+		    }
+		}
+		&.active .h3 { border : 1px solid $black; }
+		.h3+div {
+			max-height 	: 0px;
+			overflow 	: hidden;
+			padding 	: 0;
+			position 	: relative;
+			transition  : all .3s linear;
+			transform 	: translateY(-1px);
+			width 		: 100%;
+			z-index 	: 1;
+
+		    .form-check {
+				margin 			: .5rem;
+				padding 		: 0 0.5rem;
+				border 			: 1px solid $gray-light;
+				border-radius 	: 5px;
+				background 		: transparent;
+				transition 		: all .3s ease;
+				&:hover {
+					background 	: $gray-200;
+					transition 	: all .3s ease;
+					cursor 		: pointer;
+				}
+		    	.form-check-input:checked+label { background-color: transparent!important; }
+		    	.form-check-input:disabled+label { color: $gray-light!important; }
+		    	.form-check-input+label:hover 	{ background-color: transparent!important; }
+				.form-check-input:checked+label:before { display : none; }
+				.form-check-input:checked+label:after {
+					content 	: "\f00c";
+					font-family : "FontAwesome";
+					position 	: absolute;
+    				right 		: 0.6rem;
+				}
+		    	label {
+					padding 	: .2rem !important;
+					width 		: 100%;
+					&:hover { cursor: pointer; }
+				}
+		    	.filter-badge { display : none!important; }
+		    }
+			.filter-actions {
+			    border-top 	: 1px solid gray;
+			    display 	: none;
+			    position 	: relative;
+				margin-top 	: 15px;
+				a {
+			    	flex 			: 1 0 auto;
+			    	padding 		: .5rem 1rem;
+			    	text-align 		: center;
+			    	text-transform 	: uppercase;
+
+			    	&.filter-save {
+			    		background-color : $gray-900;
+			    		color 			 : $white;
+			    	}
+				}
+				&:hover { cursor: pointer; }
+			}
+		    &:before {
+	    	    content 	: "";
+			    background 	: white;
+			    border 		: 1px solid $gray-light;
+			    left 		: 0;
+			    top 		: 0;
+			    right 		: 0;
+			    bottom 		: 0;
+			    position 	: absolute;
+		    }
+		}
+		.h3.active+div { max-height : unset; }
+
+		&.price {
+			position 	: relative;
+			padding 	: 0 !important;
+			z-index 	: 0;
+			.h3 {
+				border: 1px solid $gray-light;
+			    border-bottom: 0;
+			    background: $white;
+			    padding: .5rem;
+			}
+			.h3+div {
+				width : 100%;
+				background: $white;
+				border: 1px solid $gray-light;
+				border-top: 0;
+				padding: 0 .5rem;
+				.slider {
+					margin : .8rem 0;
+					width  : 100%;
+				}
+			}
+			.slider-handle {
+				background-color : $brand-primary;
+				background-image : none;
+				height 	: 15px;
+				width 	: 15px;
+			}
+			.slider-selection { display : none; }
+		}
+	}
+
+
+	// breakpoints
+	@include media-breakpoint-up(xl) {
+		.card-columns {
+		    flex-direction 	: column;
+		    justify-content : flex-start;
+		    max-height 		: 120px;
+		}
+		.card {
+			background 	: transparent;
+			border 		: 0;
+		    display 	: inline-block;
+		    flex 		: 0 0 auto;
+		    min-width 	: unset;
+		    max-width 	: unset;
+		    width 		: unset;
+
+		    .h3+div {
+		    	display 	: inline-block;
+				width 		: auto;
+				margin-top 	: 0rem;
+				min-width 	: auto;
+				position 	: absolute;
+				white-space : nowrap;
+				transform 	: translateY(0);
+				box-shadow  : 0px 4px 9px rgba(0,0,0,0.2);
+
+				.form-check {
+					label { padding-right: 3rem !important; }
+				}
+				.filter-actions { display : flex; }
+		    }
+
+		    &.price {
+		    	min-width : 220px;
+				.h3 {
+					&:after { display: none; }
+				}
+
+				.h3 + div {
+					box-shadow 		: none;
+					display 		: inline-block;
+					max-height 		: 58px;
+					max-width 		: 100%;
+					padding-right 	: .5rem;
+
+					&:before {
+						background-color : transparent;
+						border 			 : none;
+						margin-right 	 : .5rem;
+					}
+				}
+				.input-group {
+					padding : 0 0 0 0!important;
+
+					background-color: none;
+    				transform 		: translateY(-10px);
+
+					.input-group-text {
+					    background 	: none;
+					    border 		: none;
+					    padding 	: 0;
+					}
+					input {
+						background-color : transparent;
+						border 	 		 : none;
+						padding  		 : 0 0 0 .5rem;
+					}
+					&:first-of-type { padding-left: 1rem; }
+					&:nth-child(3)  { margin-right: .0; }
+				}
+				.col-lg-2 { display: none; }
+		    }
+		}
+		// transformations
+		// &.hideToggler {
+			position : relative;
+			top 	 : -15px;
+			#filterCollapse {
+				margin 		: 0;
+	    		padding 	: 0;
+				position 	: relative;
+				z-index 	: 1001;
+
+				.card-columns+div.row { display : none; }
+				.card-columns>.card.dynamic:nth-child(n+9) { display: none; }
+				.card-columns>.card.dynamic {
+					width: 215px;
+				}
+			}
+			.page-content {
+				margin : 0;
+				padding: 0;
+				background: transparent;
+			}
+		// }
+
+			a.filter-toggle { display : none; }
+			#filterCollapse { display : block; }
+	}
+	.priceFilter-innerContainer {
+		display 		: flex;
+		flex-wrap 		: wrap;
+		justify-content : space-between;
+		padding 		: 0 .7rem;
+
+		.slider { flex : 0 0 100%; }
+		.input-group {
+		    align-items 	: center;
+		    display 		: flex!important;
+		    flex 			: 1 0 50%!important;
+		    justify-content : flex-start;
+		    margin 			: 0!important;
+		    max-width 		: unset!important;
+		    padding 		: 0!important;
+		    transform 		: none;
+
+		    &.min { margin-left : -.7rem!important; }
+		    &.max { justify-content : flex-end; }
+
+		}
+	}
+
+}

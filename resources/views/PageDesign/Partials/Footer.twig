@@ -1,0 +1,430 @@
+{% import "Ceres::PageDesign.Macros.LayoutContainer" as LayoutContainer %}
+{% set displayedCategories = [] %}
+{% set topButtonPosition = config('Ceres.footer.to_top_button') %}
+
+{% set nlBgImg = config("reiseschein.newsletter.nlBgImg") %}
+{% set nlheadline = config("reiseschein.newsletter.nlheadline") %}
+{% set nlsubheadline = config("reiseschein.newsletter.nlsubheadline") %}
+
+{% set nlusp1 = config("reiseschein.newsletter.nlusp1") %}
+{% set nlusp2 = config("reiseschein.newsletter.nlusp2") %}
+{% set nlusp3 = config("reiseschein.newsletter.nlusp3") %}
+{% set nllegal = config("reiseschein.newsletter.nllegal") %}
+
+{% set footerseotext = services.category.get(config("reiseschein.footer.footerseotext"), lang) %}
+
+<div class="footer">
+    <div id="scrollup" v-scroll-to-top>
+        <i class="fa fa-chevron-up" aria-hidden="true"></i>
+    </div>
+	<div class="container-fluid px-0">
+		<div class="row">
+			<div class="col-12 nl-wrap nl-image" data-background="https://www.reiseschein.de/images/gallery/Basis/panorama-1993645.jpg">
+                <div class="nl-headline-wrap">
+                    <div class="nl-headline p-3 text-center text-secondary">
+                        <p class="font-weight-bold ">{{ nlsubheadline }}</p>
+                        <span class="text-uppercase">{{ nlheadline }}</span>
+                    </div>
+                    <div class="arrow-border"></div>
+                </div>
+                <div class="nl-wrapper">
+    				<div class="col-12 col-md-11 col-lg-10 offset-lg-1 col-xl-8 offset-xl-2 p-3 text-center mx-auto">
+    					<div class="nl-content p-3 py-md-4 px-md-5 d-flex justify-content-center flex-wrap">
+    						<h2 class="pt-5 text-primary mb-3 font-weight-bold flex-grow-1 w-100">VIP NEWSLETTER</h2>
+    						<div class="nl-form">
+    							<form action="https://www.reiseschein.com/swm/nl.php" method="post" target="_blank">
+    								<input type="hidden" value="1" name="MailingListId">
+    								<input type="hidden" value="1" name="FormId">
+    								<input type="hidden" value="utf-8" name="FormEncoding">
+    								<input type="hidden" value="subscribe" name="Action">
+
+    								<div class="mail input-group">
+    									<input class="e form-control" name="u_EMail" type="email" autocomplete="off" placeholder="Ihre E-Mail Adresse" required="required">
+    									<input class="s font-2 btn btn-primary border-0" type="submit" value="Anmelden">
+    								</div>
+    							</form>
+    						</div>
+    						<ul class="d-flex flex-wrap flex-md-nowrap px-0 py-3 m-0 list-unstyled justify-content-around justify-content-sm-between">
+    							<li>
+    								{{ nlusp1 }} <i class="fa fa-check text-primary" aria-hidden="true"></i></li>
+    							<li>
+    								{{ nlusp2 }} <i class="fa fa-check text-primary" aria-hidden="true"></i>
+    							</li>
+    							<li>
+    								{{ nlusp3 }} <i class="fa fa-check text-primary" aria-hidden="true"></i>
+    							</li>
+    						</ul>
+    						<p class="nl-legal text-muted">
+    							<small>
+    								{% autoescape false %}
+    									{{ nllegal }}
+    								{% endautoescape %}
+    							</small>
+    						</p>
+    					</div>
+    				</div>
+    			</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="container-fluid px-0 px-md-3 px-xl-0 py-3 py-md-5 slogan">
+		<div class="container-max">
+			<div class="row">
+                <div class="col-12 d-flex justify-content-center justify-content-md-between flex-wrap flex-md-nowrap flex-column flex-md-row">
+                <div class="f-mobile-logo d-block w-100 text-center mb-3 d-md-none">
+                    <img alt="REISESCHEIN Hotelgutscheine, Kurzreisen, Kurzurlaub, Reisegutscheine - Traveltickets" src="https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/logo-die_neue-art-claim-weiss.svg" class="img-fluid">
+                </div>
+                <div class="flogo d-none d-md-block">
+					<svg xmlns="http://www.w3.org/2000/svg" width="45" height="41" viewBox="0 0 177.71 160.14"><path id="Ebene_1-2" d="M173.93 124.06a6.84 6.84 0 0 0-9.18 3.05c-4.21 8.4-9.35 13.11-15.73 14.38-16.87 3.36-42.08-16.18-64.37-35.18q3.12-.23 6.26-.56c18.2-1.9 50.23-7.72 60.27-25.47 7.49-13.25 7.52-31.48.07-48.77-7-16.18-18.84-27.74-31.76-30.94C114-.8 108.24.31 102.94 3.79 89.08 12.87 76.32 39 64 83.62 45.66 65.44 30.71 53.7 17.86 53.7h-.69a17.83 17.83 0 0 0-13.44 6.67c-4.86 5.86-5 14-.29 21.81 5.82 9.71 18.2 17.94 33.94 22.59a106.52 106.52 0 0 0 20.23 3.8c-5.71 24.22-9 43.33-9 43.57a6.84 6.84 0 1 0 13.49 2.29c0-.24 3.18-18.6 8.68-42 24.43 21.07 51.27 43.12 74.38 43.12a33.47 33.47 0 0 0 6.56-.63c10.64-2.12 19.15-9.41 25.29-21.67a6.84 6.84 0 0 0-3.08-9.19zm-158.63-49c-.73-1.21-2.28-4.22-.92-5.85a4 4 0 0 1 3.25-1.66h.21c2.88 0 9.58 1.83 23.05 13.4 4.66 4 9.52 8.63 14.36 13.47C33.47 91.6 19.86 82.65 15.3 75.06zm61 15.49c15.15-56 27.91-71.21 34.17-75.31a12.14 12.14 0 0 1 5.77-1.38c8.66 2.14 17.27 11 22.48 23.07 5.68 13.18 5.9 27.22.58 36.62-4.9 8.66-24.43 16-49.77 18.6-4.62.48-9.3.79-13.91.94z"></path></svg>
+				</div>
+				<ul class="mb-0 md-md-0 px-0 flex-grow-1 list-unstyled usps text-center text-md-left d-none d-md-block">
+					<li class="subheadline">
+						<h4 class="font-weight-bold text-uppercase mb-0">die neue art zu reisen</h4>
+					</li>
+					<li class="headline">
+						<h2 class="">Reisescheine - Hotelgutscheine - Kurzreisen</h2>
+					</li>
+					<li class="usplist">
+						<ul class="flex-column flex-md-row d-flex list-unstyled justify-content-center justify-content-md-start">
+							<li class="mr-4 mb-2 mb-lg-0">
+								<i class="fa fa-star" aria-hidden="true">&nbsp;</i>
+								<p>Nur geprüfte Hotels</p>
+							</li>
+							<li class="mr-4 mb-2 mb-lg-0">
+								<i class="fa fa-star" aria-hidden="true">&nbsp;</i>
+								<p>24h sofort lieferbar</p>
+							</li>
+							<li class="mr-4 mb-2 mb-lg-0">
+								<i class="fa fa-star" aria-hidden="true">&nbsp;</i>
+								<p>10 Jahre Erfahrung</p>
+							</li>
+							<li class="mb-2 mb-lg-0">
+								<i class="fa fa-star" aria-hidden="true">&nbsp;</i>
+								<p>Über 1 Mio Reisescheine</p>
+							</li>
+						</ul>
+					</li>
+				</ul>
+				<div class="savtey mt-3 mt-md-0">
+					<h5>Sicher einkaufen</h5>
+					<ul class="list-unstyled d-flex m-0 justify-content-between">
+						<li>
+							<a href="https://www.shopvote.de/bewertung_reiseschein_de_8678.html" target="_blank">
+								<i class="icon-shopvote"></i>
+							</a>
+						</li>
+						<li>
+							<a href="/tpl/download/Code_of_Conduct.pdf" target="_blank">
+								<i class="icon-drv-vir"></i>
+							</a>
+						</li>
+						<li>
+							<a href="https://letsencrypt.org/de/" target="_blank">
+								<img src="https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/FS_assets/reise-le.svg" width="65" height="65">
+							</a>
+						</li>
+					</ul>
+				</div>
+                </div>
+			</div>
+		</div>
+	</div>
+
+	<div class="container-fluid px-0 py-md-5 infos">
+		<div class="container-max">
+			<div class="row">
+                <div class="col-12">
+				<ul class="footer-menu justify-content-between d-flex flex-column flex-md-row list-unstyled py-0 m-0 px-3 px-xl-0 text-center text-md-left">
+					<li>
+						<h5 data-toggle="collapse" href="#collapseService" role="button" aria-expanded="false" aria-controls="collapseService">Unser Service <i class="fa fa-chevron-down" aria-hidden="true"></i></h5>
+						<ul class="navFooter collapse" id="collapseService">
+							<li>
+								<a href="/reisemagazin/">Reisemagazin<span class="new d-inline-block d-lg-none d-xl-inline-block">*NEU*</span></a>
+							</li>
+							<li>
+								<a href="/pages/faq/">Häufige Fragen</a>
+							</li>
+							<li>
+								<a href="/pages/so-gehts/">So funktionierts</a>
+							</li>
+							<li>
+								<a href="/pages/versand-und-kosten/">Versand Hinweise</a>
+							</li>
+							<li>
+								<a href="/cancellation-rights">Widerrufsrecht</a>
+							</li>
+							<li>
+								<a href="/privacy-policy">Datenschutz</a>
+							</li>
+						</ul>
+					</li>
+
+					<li>
+						<h5 data-toggle="collapse" href="#collapseHotels" role="button" aria-expanded="false" aria-controls="collapseHotels">Hotels & Partner <i class="fa fa-chevron-down" aria-hidden="true"></i></h5>
+						<ul class="navFooter collapse" id="collapseHotels">
+							<li>
+								<a href="/pages/hotelpartner/">Hotelpartner</a>
+							</li>
+							<li>
+								<a href="/pages/businesspartner/">Businesspartner</a>
+							</li>
+							<li>
+								<a href="/pages/reseller/">Wiederverkäufer</a>
+							</li>
+							<li>
+								<a href="/login/">Reseller Login</a>
+							</li>
+							<li>
+								<a href="/pages/affiliate-partner/">Affiliate Partner</a>
+							</li>
+							<li>
+								<a href="/pages/logo/">Logo Download</a>
+							</li>
+						</ul>
+					</li>
+                                   <li>
+						<h5 data-toggle="collapse" href="#collapseInfo" role="button" aria-expanded="false" aria-controls="collapseInfo">Informationen <i class="fa fa-chevron-down" aria-hidden="true"></i></h5>
+						<ul class="navFooter collapse" id="collapseInfo">
+							<li>
+								<a href="/gtc">AGB</a>
+							</li>
+							<li>
+								<a href="/pages/presse/">Presse</a>
+							</li>
+							<li>
+								<a href="/contact">Kontakt</a>
+							</li>
+							<li>
+								<a href="/legal-disclosure">Impressum</a>
+							</li>
+						</ul>
+					</li>
+
+					<li>
+						<h5>Zahlungsarten</h5>
+                        <ul class="navFooter icons payment">
+							<li>
+								<span>
+									<i class="icon-amazon"></i></span></li>
+							<li>
+								<span>
+									<i class="icon-paypal"></i></span></li>
+							<li>
+								<span>
+									<i class="icon-visa"></i></span></li>
+						</ul>
+                        <ul class="navFooter icons payment mb-4 mb-md-0">
+							<li>
+								<span>
+									<i class="icon-mastercard"></i></span></li>
+							<li>
+								<span>
+									<i class="icon-ueberweisung"></i></span></li>
+						</ul>
+					</li>
+
+					<li class="footer-social">
+						<h5>Social Media</h5>
+                        <ul class="navFooter icons">
+							<li>
+								<a href="https://www.facebook.com/www.Reiseschein.de" target="_blank">
+									<span>
+										<i class="icn-facebook-tb"></i></span></a>
+							</li>
+							<li>
+								<a href="https://instagram.com/reiseschein.de" target="_blank">
+									<span>
+										<i class="icn-instagram-tb"></i></span></a>
+							</li>
+							<li>
+								<a href="https://twitter.com/ReisescheinDE" target="_blank">
+									<span>
+										<i class="icn-twitter-tb"></i></span></a>
+							</li>
+						</ul>
+                        <ul class="navFooter icons mb-4 mb-md-0">
+							<li>
+								<a href="https://de.pinterest.com/reisescheinde" target="_blank">
+									<span>
+										<i class="icn-pinterest-tb"></i></span></a>
+							</li>
+                            <li>
+								<a href="https://www.youtube.com/user/HappyWeekendTravel" target="_blank">
+									<span>
+										<i class="icn-youtube-tb"></i></span></a>
+							</li>
+                            <li>
+								<a href="https://api.whatsapp.com/send?phone=4915227856785" target="_blank">
+									<span>
+                                        <item-lazy-img ref="itemLazyImage" template="#vue-item-lazy-img" alt="WhatsApp" image-url="https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/FS_assets/wa.png"></item-lazy-img>
+                                    </span></a>
+							</li>
+
+						</ul>
+					</li>
+
+					<li>
+						<h5>Kontakt</h5>
+						<ul class="navFooter contact">
+							<li>
+								<a href="tel:+498819254933"><i class="fa fa-phone" aria-hidden="true">&nbsp;</i></a>
+								<span><a href="tel:+498819254933">0881 925 49 33</a></span></li>
+							<li>
+								<a href="https://api.whatsapp.com/send?phone=4915227856785"><img src="{{ plugin_path('reiseschein') }}/images/footer/whatsapp.png" class="img-fluid whatsapp-footer" alt="WhatsApp"></a>
+								<span>
+									<a href="https://api.whatsapp.com/send?phone=4915227856785">
+										0152 278 56 785</a></span></li>
+							<li>
+								<a href="mailto:service@reiseschein.de"><i class="fa fa-envelope-o" aria-hidden="true">&nbsp;</i></a>
+								<span>
+									<a href="mailto:service@reiseschein.de">
+										service@reiseschein.de</a></span></li>
+							<li class="openingTimes">
+								<span>Montag bis Freitag 9:00&nbsp;‑&nbsp;17:30&nbsp;Uhr</span></li>
+						</ul>
+					</li>
+				</ul>
+                </div>
+			</div>
+		</div>
+	</div>
+
+	<div class="container-fluid subnav py-5 d-none d-lg-block">
+		<div class="container-max">
+			<div class="row">
+				<div class="col-12">
+					<div class="d-flex justify-content-between">
+						<ul>
+							<li>
+								<a href="/staedtereisen-deutschland/hotelgutschein-hamburg/">&gt; Städtetrip Hamburg</a>
+							</li>
+							<li>
+								<a href="/staedtereisen-deutschland/hotelgutschein-berlin/">&gt; Städtetrip Berlin</a>
+							</li>
+							<li>
+								<a href="/staedtereisen-deutschland/hotelgutschein-muenchen/">&gt; Städtetrip München</a>
+							</li>
+							<li>
+								<a href="/staedtereisen-deutschland/hotelgutschein-dresden/">&gt; Städtetrip Dresden</a>
+							</li>
+							<li>
+								<a href="/staedtereisen-deutschland/hotelgutschein-koeln/">&gt; Städtetrip Köln</a>
+							</li>
+						</ul>
+						<ul>
+							<li>
+								<a href="/staedtereisen-eu/paris/">&gt; Städtetrip Paris</a>
+							</li>
+							<li>
+								<a href="/staedtereisen-eu/prag/">&gt; Städtetrip Prag</a>
+							</li>
+							<li>
+								<a href="/staedtereisen-eu/amsterdam/">&gt; Städtetrip Amsterdam</a>
+							</li>
+							<li>
+								<a href="/staedtereisen-eu/budapest/">&gt; Städtetrip Budapest</a>
+							</li>
+							<li>
+								<a href="/staedtereisen-eu/rom/">&gt; Städtetrip Rom</a>
+							</li>
+						</ul>
+						<ul>
+							<li>
+								<a href="/themen/unsere-bestseller/">&gt; Unsere Besteller</a>
+							</li>
+							<li>
+								<a href="/holidaycheck-95/">&gt; Top Bewertung</a>
+							</li>
+							<li>
+								<a href="/themen/wellness/">&gt; Wellnesswochenende</a>
+							</li>
+							<li>
+								<a href="/geschenkideen/">&gt; Top Geschenkideen</a>
+							</li>
+							<li>
+								<a href="/hotelketten/">&gt; Top Hotelketten</a>
+							</li>
+						</ul>
+						<ul>
+							<li>
+								<a href="/luxury-stay/">&gt; Luxushotels</a>
+							</li>
+							<li>
+								<a href="/hotels-tickets/">&gt; Hotels &amp; Tickets</a>
+							</li>
+							<li>
+								<a href="/themen/meer-seen/">&gt; Meer &amp; Seen</a>
+							</li>
+							<li>
+								<a href="/themen/romantik/">&gt; Romantik Wochenende</a>
+							</li>
+							<li>
+								<a href="/themen/berge/">&gt; Urlaub in den Bergen</a>
+							</li>
+						</ul>
+						<ul>
+							<li>
+								<a href="/a-7935/">&gt; 99er Multi Reiseschein</a>
+							</li>
+							<li>
+								<a href="/a-7358/">&gt; 159er Multi Reiseschein</a>
+							</li>
+							<li>
+								<a href="/a-7991/">&gt; 199er Multi Reiseschein</a>
+							</li>
+							<li>
+								<a href="/a-8303/">&gt; a&amp;o Multi Reiseschein</a>
+							</li>
+							<li>
+								<a href="/a-7719/">&gt; H-Hotels Multi Reiseschein</a>
+							</li>
+						</ul>
+						<ul>
+							<li>
+								<a href="/regionen/nordsee/">&gt; Nordseeurlaub</a>
+							</li>
+							<li>
+								<a href="/regionen/ostsee/">&gt; Ostseeurlaub</a>
+							</li>
+							<li>
+								<a href="/regionen/tirol/">&gt; Urlaub in Tirol</a>
+							</li>
+							<li>
+								<a href="/regionen/ruhrgebiet/">&gt; Urlaub im Ruhrgebiet</a>
+							</li>
+							<li>
+								<a href="/regionen/sauerland/">&gt; Urlaub im Sauerland
+								</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+    <div class="container-fluid px-3 px-sm-4 py-2 footer-seo">
+		<div class="container-max">
+            <div class="row">
+                <div class="col-12 pt-3 copy small text-center">
+					<p class="d-block">&copy; 2008 - {{ "now" | date("Y") }} <strong>TravelBroker GmbH</strong>. {{ trans("Ceres::Template.footerAllRightsReserved") }}</p>
+                </div>
+                <div class="col-12 pb-3 copy small text-center">
+                    <p class="d-block">(1) Der reguläre Preis vom Leistungsanbieter ohne Rabatt für die Inklusivleistungen im Reiseschein.<br />
+                        (2) Rabattangabe in Bezug auf den regulär vom Leistungsanbieter verlangten Preis ohne Rabatt für die Inklusivleistungen im Reiseschein.<br />
+                        Alle Preise inkl. gesetzlicher Mehrwertsteuer zuzüglich Versandkosten.</p>
+				</div>
+            </div>
+
+        </div>
+    </div>
+
+    {% if services.template.isHome() %}
+        <div class="d-none d-md-block">
+            {% autoescape false %}
+                {{ footerseotext.details[0].description }}
+            {% endautoescape %}
+        </div>
+    {% endif %}
+</div>

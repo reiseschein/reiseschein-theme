@@ -1,0 +1,33 @@
+<script type="x/template" id="vue-item-filter-price">
+	<div class="priceFilter-innerContainer">
+		<input id="price-range-slider" type="text" class="span2" value="" data-slider-min="{{ smallPrice }}" data-slider-max="{{ bigPrice }}" data-slider-step="5" :data-slider-value="'[' + (priceMin>0?priceMin:{{ smallPrice }}) +',' + (priceMax>0?priceMax:{{bigPrice}}) + ']'"/>
+
+
+		<div class="input-group min">
+			<input type="number"
+				   class="form-control d-none"
+				   @focus="selectAll($event)"
+				   :placeholder="priceMin>0?priceMin:{{smallPrice}}"
+				   readonly
+				   v-model="priceMin"> 
+			<span v-html="priceMin>0?priceMin:{{smallPrice}}" class="val"></span><span>€</span>
+		</div>
+
+		<div class="input-group max">
+			<input type="number"
+				   class="form-control d-none"
+				   @focus="selectAll($event)"
+				   :placeholder="priceMax>0?priceMax:{{ bigPrice }}"
+				   readonly
+				   v-model="priceMax">
+			<span v-html="priceMax>0?priceMax:{{bigPrice}}" class="val"></span><span>€</span>
+		</div>
+
+		<div class="col-lg-2 d-none">
+			<button type="button" class="btn btn-primary" :class="{'disabled': isDisabled}" v-tooltip 
+					data-toggle="tooltip" data-placement="top" @click="triggerFilter()" title="{{ trans("Ceres::Template.itemApply") }}">
+				<i v-waiting-animation="isLoading" class="fa fa-check" aria-hidden="true"></i>
+			</button>
+		</div>
+	</div>	
+</script>

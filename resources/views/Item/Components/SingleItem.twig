@@ -1,0 +1,463 @@
+{% import "Ceres::Basket.Macros.AddToBasket" as AddToBasket %}
+{% import "Ceres::Item.Macros.AgeRestriction" as AgeRestriction %}
+{% import "reiseschein::Category.Macros.CategoryTree" as Tree %}
+
+{% set itemData = config("Ceres.item.data") | split(', ') %}
+{% set enabledRoutes = config("IO.routing.enabled_routes") | split(', ') %}
+
+{% set lengthMM = item.documents[0].data.variation.lengthMM %}
+{% set weightG = item.documents[0].data.variation.weightG %}
+{% set weightNetG = item.documents[0].data.variation.weightNetG %}
+
+{% set freeArray = themeItem.free17|split('[') %}
+{% set moreItems = '' %}
+{% set moreItemsArray = '' %}
+{% set moreItemFree = '' %}
+{% set catName = '' %}
+{% set persons = '' %}
+{% set nights = '' %}
+{% set food = '' %}
+{% set valid = '' %}
+{% set holidayCheckID = '' %}
+{% set icons = '' %}
+{% set iconsArray = '' %}
+{% set stars = '' %}
+{% set prices = '' %}
+{% set pricesArray = '' %}
+
+{% for free in freeArray %}
+    {% if free starts with '1]' %}{% set moreItems = free[2:] %}{% set moreItemsArray = moreItems|split(',') %}{% endif %}
+    {% if free starts with '2]' %}{% set catName = free[2:] %}{% endif %}
+    {% if free starts with '3]' %}{% set persons = free[2:] %}{% endif %}
+    {% if free starts with '4]' %}{% set nights = free[2:] %}{% endif %}
+    {% if free starts with '5]' %}{% set food = free[2:] %}{% endif %}
+    {% if free starts with '6]' %}{% set valid = free[2:] %}{% endif %}
+    {% if free starts with '7]' %}{% set holidayCheckID = free[2:] %}{% endif %}
+    {% if free starts with '8]' %}{% set icons = free[2:] %}{% set iconsArray = icons|split(',') %}{% endif %}
+    {% if free starts with '9]' %}{% set stars = free[2:] %}{% endif %}
+    {% if free starts with '10]' %}{% set prices = free[3:] %}{% set pricesArray = prices|split(',') %}{% endif %}
+{% endfor %}
+{% set string14 	= item.documents[0].data.texts.name3|split('###') %}
+{% set string18 	= string14[1]|split('~~~') %}
+{% set h4     		= string18[0] %}
+<script type="x/template" id="vue-single-item">
+    <div>
+        <slot name="default" :getDataField="getDataField" :getFilteredDataField="getFilteredDataField">
+
+            <div class="single-header">
+                <div class="single-header-wrapper">
+                    <div class="single-header-left">
+                        {% for image in item.documents[0].data.images.all|orderByKey("position") %}
+                            {% if loop.index == 3 %}
+                                <img src="{{ image.url }}" class="img-fluid d-block">
+                            {% elseif loop.index == 4 %}
+                                <img src="{{ image.url }}" class="img-fluid d-block">
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <div class="single-header-right">
+                    {% for image in item.documents[0].data.images.all|orderByKey("position") %}
+                        {% if loop.index == 2 %}
+                            <img src="{{ image.url }}" class="img-fluid d-block">
+                        {% endif %}
+                    {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <a class="gallery-btn btn btn-inline-block btn-primary btn-appearance text-uppercase font-weight-bold d-inline-block" href="#galerie">Bilder ansehen</a>
+            <div class="single-wrapper">
+                <div class="single-headline py-5 px-3">
+                    <div class="container-max single-headline-inner">
+                        <div class="row">
+                            <div class="col-12 col-xl-8">
+                                <h1>{{ h4 }}</h1>
+                                <span><i class="fa fa-star text-primary" aria-hidden="true"></i> {{ item.documents[0].data.item.manufacturer.name }} <i class="fa fa-star text-primary" aria-hidden="true"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <slot name="bread"></slot>
+                <div class="container-fluid pt-0">
+                       <div class="single container-max page-content">
+                           <div class="row mt-5 pb-1 position-relative px-3 px-xl-0">
+
+                               <div class="col-12 col-lg-7 col-xl-8 order-2 order-lg-1" id="item-container">
+                                   <h2>Freuen Sie sich auf</h2>
+                                   {{ item.documents[0].data.texts.technicalData | raw }}
+                               </div>
+
+                               <div class="col-12 col-lg-5 col-xl-4 order-1 order-lg-2">
+                                   <div class="single-right-box mb-5 mb-lg-0">
+                                       {% include "reiseschein::Item.Components.SingleItem.SingleItem_Details" %}
+                                   </div>
+                               </div>
+                           </div>
+                       </div>
+                </div>
+
+                <div class="container-fluid availability-area">
+                    <div class="single container-max">
+                        <div class="row px-3 px-xl-0">
+                            <div class="col-12 col-lg-5 mb-5">
+                                {% if (lengthMM=="93") or (lengthMM=="96") or (lengthMM=="97") or (lengthMM=="98") or (lengthMM=="99") %}
+                                <h2><i class="fa fa-calendar-check-o" aria-hidden="true"></i> Verfügbarkeit</h2>
+                                <div class="hld">
+                                    {% if (lengthMM=="93") or (lengthMM=="96") or (lengthMM=="97") or (lengthMM=="98") or (lengthMM=="99") %}
+
+                                        {% if (lengthMM=="96") or (lengthMM=="99") %}
+
+                                            {% if (lengthMM=="96") and (lengthMM=="66") %}<span class="text-underline font-bold">Verfügbarkeit:</span>
+                                            {% else %}
+                                                {% if weightG > 0 %} <iframe src="https://reiseschein.com/dates/preview.php?cid={{ weightG }}&locale=2&months=1&width=500&height=400" width="500px" height="360px" frameborder="0" scrolling="auto"></iframe><br><br>
+                                                {% endif %}
+
+                                                {% if themeItem.free15 %}
+                                                    <strong class="hf-1">Kontaktdaten für die Verfügbarkeitsabfrage:</strong>
+                                                    <div class="pt-2 text-justify">
+
+                                                    {{ themeItem.free15 | raw }}
+
+
+                                                    </div>
+                                                {% endif %}
+                                                <div class="pt-5"><strong class="hf-1">Verfügbarkeit / Gültigkeit:</strong></div>
+                                            {% endif %}
+                                            <div class="pt-2 text-justify">{{ themeItem.free3 | raw }}</div>
+                                        {% elseif lengthMM=="97" %}<strong class="hf-1">Verfügbarkeit / Gültigkeit:</strong><div class="free3">{{ themeItem.free3 | raw }}</div>
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                            </div>
+                            <div class="col-12 col-lg-6 offset-lg-1">
+                                {% if iconsArray|length > 1 %}
+                                    <h2>Hotelausstattung</h2>
+                                {% endif %}
+                                <div class="icons d-flex flex-wrap flex-lg-nowrap mb-5">
+                                    {% for icon in iconsArray %}
+                                    <span class="i">
+                                        {% if icon == 1 %}<item-lazy-img ref="itemLazyImage" template="#vue-item-lazy-img" alt="WLAN Icon" title="WLAN" image-url="https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/FS_assets/wlan.svg" class="img-fluid"></item-lazy-img><span>WLAN</span>{% endif %}
+                                        {% if icon == 2 %}<item-lazy-img ref="itemLazyImage" template="#vue-item-lazy-img" alt="Restaurant Icon" title="Restaurant" image-url="https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/FS_assets/restaurant.svg" class="img-fluid"></item-lazy-img><span>Restaurant</span>{% endif %}
+                                        {% if icon == 3 %}<item-lazy-img ref="itemLazyImage" template="#vue-item-lazy-img" alt="Bar Icon" title="Bar" image-url="https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/FS_assets/bar2.svg" class="img-fluid"></item-lazy-img><span>Bar</span>{% endif %}
+                                        {% if icon == 4 %}<item-lazy-img ref="itemLazyImage" template="#vue-item-lazy-img" alt="Spa und Wellness Icon" title="Spa und Wellness" image-url="https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/FS_assets/spa.svg" class="img-fluid"></item-lazy-img><span>Spa und Wellness</span>{% endif %}
+                                        {% if icon == 5 %}<item-lazy-img ref="itemLazyImage" template="#vue-item-lazy-img" alt="Pool Icon" title="Pool" image-url="https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/FS_assets/pool2.svg" class="img-fluid"></item-lazy-img><span>Pool</span>{% endif %}
+                                        {% if icon == 6 %}<item-lazy-img ref="itemLazyImage" template="#vue-item-lazy-img" alt="Fitness Icon" title="Fitness" image-url="https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/FS_assets/fitness.svg" class="img-fluid"></item-lazy-img><span>Fitness</span>{% endif %}
+                                        {% if icon == 7 %}<item-lazy-img ref="itemLazyImage" template="#vue-item-lazy-img" alt="Parkplatz Icon" title="Parkplatz" image-url="https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/FS_assets/parkplatz.svg" class="img-fluid"></item-lazy-img><span>Parkplatz</span>{% endif %}
+                                        {% if icon == 8 %}<item-lazy-img ref="itemLazyImage" template="#vue-item-lazy-img" alt="24 Stunden Icon" title="24 Stunden Rezeption" image-url="https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/FS_assets/24h.svg" class="img-fluid"></item-lazy-img><span>24h Rezeption</span>{% endif %}
+                                        {% if icon == 9 %}<item-lazy-img ref="itemLazyImage" template="#vue-item-lazy-img" alt="Fahrstuhl Icon" title="Fahrstuhl" image-url="https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/FS_assets/fahrstuhl.svg" class="img-fluid"></item-lazy-img><span>Fahrstuhl</span>{% endif %}
+                                        {% if icon == 10 %}<item-lazy-img ref="itemLazyImage" template="#vue-item-lazy-img" alt="Haustiere Icon" title="Haustiere" image-url="https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/FS_assets/haustiere.svg" class="img-fluid"></item-lazy-img><span>Haustiere</span>{% endif %}
+                                    </span>
+                                    {% endfor %}
+                                </div>
+
+                                <div class="single-properties row">
+                                    <div class="col">
+                                        {% for prop in item.documents[0].data.properties if prop.group.id == 14 %}
+                                            {% if loop.index == 1 %}<strong>Hotelaustattung</strong>{% endif %}
+                                            <div class="single-property d-flex align-items-baseline">
+                                                <i class="fa fa-check text-primary" aria-hidden="true"></i> {{ prop.property.names.name }}
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="col">
+                                        {% for prop in item.documents[0].data.properties if prop.group.id == 12 %}
+                                            {% if loop.index == 1 %}<strong>Gastronomie</strong>{% endif %}
+                                            <div class="single-property d-flex align-items-baseline">
+                                                <i class="fa fa-check text-primary" aria-hidden="true"></i> {{ prop.property.names.name }}
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="col">
+                                        {% for prop in item.documents[0].data.properties if prop.group.id == 13 %}
+                                            {% if loop.index == 1 %}<strong>Zimmerausstattung</strong>{% endif %}
+                                            <div class="single-property d-flex align-items-baseline">
+                                                <i class="fa fa-check text-primary" aria-hidden="true"></i> {{ prop.property.names.name }}
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="col">
+                                        {% for prop in item.documents[0].data.properties if prop.group.id == 15 %}
+                                            {% if loop.index == 1 %}<strong>Wellness</strong>{% endif %}
+                                            <div class="single-property d-flex align-items-baseline">
+                                                <i class="fa fa-check text-primary" aria-hidden="true"></i> {{ prop.property.names.name }}
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+               <div class="container-fluid">
+                       <div class="single container-max page-content">
+                           <div class="row">
+                               <div class="col-12">
+                                   <div class="row">
+                                       <div class="col-12" id="galerie">
+                                           <h2 class="mx-2 mx-sm-4 mx-md-0"><i class="fa fa-picture-o" aria-hidden="true"></i> Bildergalerie</h2>
+                                           <div class="px-2 px-sm-4 px-md-0"><slot name="image-carousel"></slot></div>
+                                       </div>
+                                   </div>
+                               </div>
+                           </div>
+                       </div>
+                </div>
+
+                <div class="container-fluid">
+                     <div class="single container-max">
+
+                            <div class="row">
+                                <div class="col-12 col-lg-7">
+                                    <div class="info-tb-icon"><i class="fa fa-info"></i></div>
+                                    <div class="vouchersave2">
+                                        <div class="vouchersave-back"></div>
+                                        <div class="save-content">
+                                        <h2>Ein Reiseschein ist die beste Geschenkidee!</h2>
+                                        <ul class="list-unstyled">
+                                            <li class="save-haken">Ohne Namens- und Wertangabe können Sie den Reiseschein ideal verschenken</li>
+                                            <li class="save-haken">Bis zu 3 Jahre Gültigkeit für eine flexible Einlösung Ihrer Wahl</li>
+                                            <li class="save-haken">Sie bekommen den Reiseschein sofort per E-Mail </li>
+                                            <li class="save-haken">Nur geprüfte Hotels für das schönste Reiseerlebnis</li>
+                                            <li class="save-haken">Schneller & persönlicher Service – Kein Callcenter!</li>
+                                            <li class="save-haken">10 Jahre Erfahrung & über 1 Million gelieferte Reisescheine</li>
+                                        </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-lg-5">
+                                    <video controls="" height="317" width="100%" src="https://www.reiseschein.de/layout/responsive/tb/video/Reiseschein.mp4" poster="https://www.reiseschein.de/layout/responsive/tb/video/thumbnail.jpg" preload="none"></video>
+                                </div>
+                            </div>
+                     </div>
+                </div>
+
+
+                {% if themeItem.free16 == "multi" %}
+                {% set ID = item.documents[0].data.item.id %}
+                <div class="container-fluid">
+                    <div class="single container-max">
+                        <div class="row">
+                            <div class="col-12">
+
+                                <div id="section4">
+                                    <div class="head px-3 px-xl-0"><h2><i class="fa fa-map-marker" aria-hidden="true"></i> Lage der Hotels</h2></div>
+
+                                    <div class="hld">
+                    					<div id="gordonslandeplatz"></div>
+                                        {% if ID == "7389" %}
+                                        <div class="frame-container"><iframe src="https://sales.reiseschein.de/public_html/GoogleMapsV1/multi-7389.html" id="iframemap" name="Kartensuche" scrolling="no" frameborder="0" align=aus marginheight="0px" marginwidth="0px" ></iframe></div>
+                                        {% elseif ID == "7276" %}
+                                        <div class="frame-container"><iframe src="https://sales.reiseschein.de/public_html/GoogleMapsV1/multi-7276.html" id="iframemap" name="Kartensuche" scrolling="no" frameborder="0" align=aus marginheight="0px" marginwidth="0px" ></iframe></div>
+                                        {% elseif ID == "7278" %}
+                                        <div class="frame-container"><iframe src="https://sales.reiseschein.de/public_html/GoogleMapsV1/multi-7278.html" id="iframemap" name="Kartensuche" scrolling="no" frameborder="0" align=aus marginheight="0px" marginwidth="0px" ></iframe></div>
+                                        {% elseif ID == "7358" %}
+                                        <div class="frame-container"><iframe src="https://sales.reiseschein.de/public_html/GoogleMapsV1/multi-7358.html" id="iframemap" name="Kartensuche" scrolling="no" frameborder="0" align=aus marginheight="0px" marginwidth="0px" ></iframe></div>
+                                        {% elseif ID == "7987" %}
+                                        <div class="frame-container"><iframe src="https://sales.reiseschein.de/public_html/GoogleMapsV1/multi-7987.html" id="iframemap" name="Kartensuche" scrolling="no" frameborder="0" align=aus marginheight="0px" marginwidth="0px" ></iframe></div>
+                                        {% elseif ID == "7428" %}
+                                        <div class="frame-container"><iframe src="https://sales.reiseschein.de/public_html/GoogleMapsV1/multi-7428.html" id="iframemap" name="Kartensuche" scrolling="no" frameborder="0" align=aus marginheight="0px" marginwidth="0px" ></iframe></div>
+                                        {% elseif ID == "7429" %}
+                                        <div class="frame-container"><iframe src="https://sales.reiseschein.de/public_html/GoogleMapsV1/multi-7429.html" id="iframemap" name="Kartensuche" scrolling="no" frameborder="0" align=aus marginheight="0px" marginwidth="0px" ></iframe></div>
+                                        {% elseif ID == "7720" %}
+                                        <div class="frame-container"><iframe src="https://sales.reiseschein.de/public_html/GoogleMapsV1/multi-7720.html" id="iframemap" name="Kartensuche" scrolling="no" frameborder="0" align=aus marginheight="0px" marginwidth="0px" ></iframe></div>
+                                        {% elseif ID == "7719" %}
+                                        <div class="frame-container"><iframe src="https://sales.reiseschein.de/public_html/GoogleMapsV1/multi-7719.html" id="iframemap" name="Kartensuche" scrolling="no" frameborder="0" align=aus marginheight="0px" marginwidth="0px" ></iframe></div>
+                                        {% elseif ID == "7721" %}
+                                        <div class="frame-container"><iframe src="https://sales.reiseschein.de/public_html/GoogleMapsV1/multi-7721.html" id="iframemap" name="Kartensuche" scrolling="no" frameborder="0" align=aus marginheight="0px" marginwidth="0px" ></iframe></div>
+                                        {% elseif ID == "7722" %}
+                                        <div class="frame-container"><iframe src="https://sales.reiseschein.de/public_html/GoogleMapsV1/multi-7722.html" id="iframemap" name="Kartensuche" scrolling="no" frameborder="0" align=aus marginheight="0px" marginwidth="0px" ></iframe></div>
+                                        {% elseif ID == "7723" %}
+                                        <div class="frame-container"><iframe src="https://sales.reiseschein.de/public_html/GoogleMapsV1/multi-7723.html" id="iframemap" name="Kartensuche" scrolling="no" frameborder="0" align=aus marginheight="0px" marginwidth="0px" ></iframe></div>
+                                        {% elseif ID == "7724" %}
+                                        <div class="frame-container"><iframe src="https://sales.reiseschein.de/public_html/GoogleMapsV1/multi-7724.html" id="iframemap" name="Kartensuche" scrolling="no" frameborder="0" align=aus marginheight="0px" marginwidth="0px" ></iframe></div>
+                                        {% elseif ID == "3587" %}
+                                        <div class="frame-container"><iframe src="https://sales.reiseschein.de/public_html/GoogleMapsV1/multi-3587.html" id="iframemap" name="Kartensuche" scrolling="no" frameborder="0" align=aus marginheight="0px" marginwidth="0px" ></iframe></div>
+                                        {% elseif ID == "7725" %}
+                                        <div class="frame-container"><iframe src="https://sales.reiseschein.de/public_html/GoogleMapsV1/multi-7725.html" id="iframemap" name="Kartensuche" scrolling="no" frameborder="0" align=aus marginheight="0px" marginwidth="0px" ></iframe></div>
+                                        {% elseif ID == "7358" %}
+                                        <div class="frame-container"><iframe src="https://sales.reiseschein.de/public_html/GoogleMapsV1/multi-7358.html" id="iframemap" name="Kartensuche" scrolling="no" frameborder="0" align=aus marginheight="0px" marginwidth="0px" ></iframe></div>
+                                        {% elseif ID == "7935" %}
+                                        <div class="frame-container"><iframe src="https://sales.reiseschein.de/public_html/GoogleMapsV1/multi-7935.html" id="iframemap" name="Kartensuche" scrolling="no" frameborder="0" align=aus marginheight="0px" marginwidth="0px" ></iframe></div>
+                                        {% elseif ID == "7991" %}
+                                        <div class="frame-container"><iframe src="https://sales.reiseschein.de/public_html/GoogleMapsV1/multi-7991.html" id="iframemap" name="Kartensuche" scrolling="no" frameborder="0" align=aus marginheight="0px" marginwidth="0px" ></iframe></div>
+                                        {% elseif ID == "8582" %}
+                                        <div class="frame-container">
+                                        <iframe src="https://sales.reiseschein.de/public_html/GoogleMapsV1/multi-8582.html" id="iframemap" name="Kartensuche" scrolling="no" frameborder="0" align=aus marginheight="0px" marginwidth="0px" ></iframe></div>
+                                        {% elseif ID == "8581" or  ID == "8303" or ID == "8304" or ID == "8324" %}
+                                        <div class="frame-container"><iframe src="https://sales.reiseschein.de/public_html/GoogleMapsV1/multi-8303.html" id="iframemap" name="Kartensuche" scrolling="no" frameborder="0" align=aus marginheight="0px" marginwidth="0px" ></iframe></div>
+                                        {% elseif ID == "8305" or ID == "8306"  %}
+                                        <div class="frame-container"><iframe src="https://sales.reiseschein.de/public_html/GoogleMapsV1/multi-8305.html" id="iframemap" name="Kartensuche" scrolling="no" frameborder="0" align=aus marginheight="0px" marginwidth="0px" ></iframe></div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if themeItem.free16 != "multi" and themeItem.free16 != "" %}
+                <div class="container-fluid gmap-area">
+                    <div class="single container-max">
+                        <div class="row">
+                            <div class="col-12">
+
+                                <div id="section4">
+                                    <div class="head px-3 px-xl-0"><h2><i class="fa fa-map-marker" aria-hidden="true"></i> Lage &amp; Umgebung</h2></div>
+
+                                    <div class="hld">
+                    					<div id="gordonslandeplatz"></div>
+                    					<div class="calc-route px-3 px-xl-0">
+                    						<span>Route <br />berechnen:</span>
+                    						<input type="text" placeholder="PLZ oder Ort eingeben" class="startort-txt" />
+                    						<input type="button" value="Start" class="find-route" />
+                    						<input type="button" value="Zeige Routeninformationen" class="show-route-information" />
+                    					</div>
+                    					<div id="directionsPanel"></div>
+                    					<div id="map_canvas"></div>
+                    				</div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                <div class="container-fluid">
+                       <div class="single container-max">
+                           <div class="row px-3 px-xl-0">
+                               <div class="col-12 py-3">
+                                   <h2><i class="fa fa-check-square-o" aria-hidden="true"></i> Beschreibung</h2>
+                                   {% include "reiseschein::Item.Components.SingleItem.SingleItem_InformationTable" %}
+                               </div>
+                           </div>
+                       </div>
+                </div>
+
+                {% if weightNetG > 0 %}
+                <div class="container-fluid ">
+                    <div class="single container-max">
+                        <div class="row">
+                            <div class="col-12">
+                                    <h2 class="px-3 px-xl-0"><i class="fa fa-star-o" aria-hidden="true"></i> HolidayCheck</h2>
+                					<div class="hcheck text-light">
+                						<div class="widget">
+                							<div class="hc-logo"><i class="icon-hc-logo"></i></div>
+                							<div class="grid">
+                								<div class="img">
+                                                                      <item-lazy-img ref="itemLazyImage" template="#vue-item-lazy-img" alt="Hotel Bild" image-url="{{ item.documents[0].data.images.all[0].urlPreview }}" class="img-fluid"></item-lazy-img>
+                									<div><span id="countReviews"></span> Bewertungen</div>
+                									<a href="" class="go-rate first" target="_blank" rel="nofollow">Jetzt bewerten</a>
+                								</div>
+                								<div class="rating">
+                									<div class="weiterempfehlung">
+                										<div class="font-bold">Weiterempfehlung</div>
+                										<div class="scale recommendation"><span id="recommendation"></span>%</div>
+                									</div>
+                									<div class="gesamt">
+                										<div class="font-bold">Gesamtbewertung</div>
+                										<div class="scale averageRating"><span id="averageRating"></span> / 6</div>
+                									</div>
+
+                									<div class="single-rating">
+                										<span class="name">Hotel allgemein</span>
+                										<span class="rate" id="hotelRatingRate">
+                											<span><i class="icon-sun"></i></span>
+                											<span><i class="icon-sun"></i></span>
+                											<span><i class="icon-sun"></i></span>
+                											<span><i class="icon-sun"></i></span>
+                											<span><i class="icon-sun"></i></span>
+                											<span><i class="icon-sun"></i></span>
+                										</span>
+                										<span class="number" id="hotelRating"></span>
+                									</div>
+                									<div class="single-rating">
+                										<span class="name">Zimmer</span>
+                										<span class="rate" id="roomRatingRate">
+                											<span><i class="icon-sun"></i></span>
+                											<span><i class="icon-sun"></i></span>
+                											<span><i class="icon-sun"></i></span>
+                											<span><i class="icon-sun"></i></span>
+                											<span><i class="icon-sun"></i></span>
+                											<span><i class="icon-sun"></i></span>
+                										</span>
+                										<span class="number" id="roomRating"></span>
+                									</div>
+                									<div class="single-rating">
+                										<span class="name">Service</span>
+                										<span class="rate" id="serviceRatingRate">
+                											<span><i class="icon-sun"></i></span>
+                											<span><i class="icon-sun"></i></span>
+                											<span><i class="icon-sun"></i></span>
+                											<span><i class="icon-sun"></i></span>
+                											<span><i class="icon-sun"></i></span>
+                											<span><i class="icon-sun"></i></span>
+                										</span>
+                										<span class="number" id="serviceRating"></span>
+                									</div>
+                									<div class="single-rating">
+                										<span class="name">Lage</span>
+                										<span class="rate" id="locationRatingRate">
+                											<span><i class="icon-sun"></i></span>
+                											<span><i class="icon-sun"></i></span>
+                											<span><i class="icon-sun"></i></span>
+                											<span><i class="icon-sun"></i></span>
+                											<span><i class="icon-sun"></i></span>
+                											<span><i class="icon-sun"></i></span>
+                										</span>
+                										<span class="number" id="locationRating"></span>
+                									</div>
+                									<div class="single-rating">
+                										<span class="name">Gastronomie</span>
+                										<span class="rate" id="foodRatingRate">
+                											<span><i class="icon-sun"></i></span>
+                											<span><i class="icon-sun"></i></span>
+                											<span><i class="icon-sun"></i></span>
+                											<span><i class="icon-sun"></i></span>
+                											<span><i class="icon-sun"></i></span>
+                											<span><i class="icon-sun"></i></span>
+                										</span>
+                										<span class="number" id="foodRating"></span>
+                									</div>
+                									<div class="single-rating">
+                										<span class="name">Sport &amp; Unterh.</span>
+                										<span class="rate" id="sportRatingRate">
+                											<span><i class="icon-sun"></i></span>
+                											<span><i class="icon-sun"></i></span>
+                											<span><i class="icon-sun"></i></span>
+                											<span><i class="icon-sun"></i></span>
+                											<span><i class="icon-sun"></i></span>
+                											<span><i class="icon-sun"></i></span>
+                										</span>
+                										<span class="number" id="sportRating"></span>
+                									</div>
+                									<a href="" class="go-rate second" target="_blank" rel="nofollow">Jetzt bewerten</a>
+                								</div>
+                							</div>
+                						</div>
+                						<div class="hotel">
+                							{% if item.documents[0].data.item.manufacturer.logo != '' %}<item-lazy-img ref="itemLazyImage" template="#vue-item-lazy-img" alt="Hotel Logo" image-url="{{ item.documents[0].data.item.manufacturer.logo }}" class="img-fluid"></item-lazy-img>{% endif %}
+                							<div class="address">{{ themeItem.free15 | raw }}</div>
+                						</div>
+                					</div>
+                                          </div>
+                                   </div>
+                            </div>
+                  </div>
+                  {% endif %}
+                  <div class="container-fluid">
+                      <div class="single container-max">
+                        <div class="crossselling px-3 px-xl-0">
+                            <slot name="item-list-container"></slot>
+                        </div>
+                        <slot name="feedback-container"></slot>
+                    </div>
+                </div>
+            </div>
+        </slot>
+    </div>
+</script>

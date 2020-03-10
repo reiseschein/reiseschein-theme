@@ -1,0 +1,23 @@
+{% extends getPartial('page-design') %}
+
+{% block PartialHead %}
+    {% embed getPartial('page-metadata') %}
+        {% block title trans("Ceres::Template.wishList") %}
+    {% endembed %}
+{% endblock %}
+
+{% block PageBody %}
+    {{ component( "reiseschein::WishList.Components.WishList" ) }}
+
+    <div class="page-content wishlist container-max mb-5">
+        <div class="row mt-3">
+            <div class="col-12">
+                <h1 class="h2">{{ trans("Ceres::Template.wishList") }}</h1>
+            </div>
+        </div>
+
+        <hr>
+
+         <wish-list template="#vue-wish-list" :init-ids="{{ wishList | json_encode() }}"></wish-list>
+    </div>
+{% endblock %}

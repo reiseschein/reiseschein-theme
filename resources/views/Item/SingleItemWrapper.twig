@@ -1,0 +1,115 @@
+{% extends getPartial('page-design') %}
+{% import "Ceres::PageDesign.Macros.LayoutContainer" as LayoutContainer %}
+{% import "Ceres::PageDesign.Macros.ItemName" as ItemName %}
+
+{% block PartialHead %}
+
+    {% set itemData = item.documents[0].data %}
+    {% embed getPartial('page-metadata') %}
+        {% block title          ItemName.get(itemData | itemName, itemData.variation.bundleType) %}
+        {% block description    itemData.texts.metaDescription %}
+        {% block keywords       itemData.texts.keywords %}
+        {% block image          itemData.images.all[0].url %}
+        {% block robots         "ALL" %}
+        {% block schemaOrg %}
+            {
+                "@context"      : "http://schema.org/",
+                "@type"         : "Product",
+                "name"          : "{{ ItemName.get(itemData | itemName, itemData.variation.bundleType) }}",
+                "category"      : "item.",
+                "releaseDate"   : "{{ itemData.variation.releasedAt }}",
+                "image"         : "{{ itemData.images.all[0].urlPreview }}",
+                "identifier"    : "{{ itemData.variation.id }}",
+                "description"   : "{{ itemData.texts.description | filterTabs }}",
+                "disambiguatingDescription" : "{{ itemData.texts.shortDescription }}",
+                "manufacturer"  : {
+                    "@type"         : "Organization",
+                    "name"          : "{{ itemData.item.manufacturer.externalName }}"
+                },
+                "model": {
+                    "@type"         : "ProductModel",
+                    "isVariantOf"   : "{{ itemData.item.id }}",
+                    "model"         : "{{ itemData.variation.model }}"
+                },
+                "offers": {
+                    "@type"         : "Offer",
+                    "priceCurrency" : "{{ itemData.prices.default.currency }}",
+                    "price"         : "{{ itemData.prices.default.price.value | number_format(2, '.', '') }}",
+                    {% if itemData.prices.default.baseLot > 0 %}
+                    "priceSpecification": {
+                        "@type": "UnitPriceSpecification",
+                        "price": "{{ item.documents[0].data.prices.default.baseSinglePrice | number_format(2, '.', '') }}",
+                        "priceCurrency": "{{ item.documents[0].data.prices.default.currency }}",
+                        "referenceQuantity": {
+                            "@type": "QuantitativeValue",
+                            "value": "{{ item.documents[0].data.prices.default.baseLot }}",
+                            "unitCode": "{{ item.documents[0].data.prices.default.baseUnit }}"
+                        }
+                    },
+                    {% endif %}
+                    "availability"  : "{{ itemData.variation.availability.mappedAvailability }}",
+                    "itemCondition" : "{{ itemData.item.condition.names.name }}",
+                    "serialNumber"  : "{{ itemData.variation.number }}"
+                },
+                "depth": {
+                    "@type"         : "QuantitativeValue",
+                    "value"         : "{{ itemData.variation.lengthMM }}"
+                },
+                "width": {
+                    "@type"         : "QuantitativeValue",
+                    "value"         : "{{ itemData.variation.widthMM }}"
+                },
+                "height": {
+                    "@type"         : "QuantitativeValue",
+                    "value"         : "{{ itemData.variation.heightMM }}"
+                },
+                "weight": {
+                    "@type"         : "QuantitativeValue",
+                    "value"         : "{{ itemData.variation.weightG }}"
+                }
+            }
+        {% endblock %}
+    {% endembed %}
+{% endblock %}
+
+{% block PageBody %}
+    {{ set_item_data_base(item.documents[0].data) }}
+    {{ component("Ceres::Item.Components.SingleItem") }}
+
+    {% set shopBuilderTemplate = "" %}
+    {% set currentCategory = services.category.getCurrentCategory() %}
+
+    {% if currentCategory is defined %}
+        {# Check for item template for specific category first #}
+        {% set shopBuilderTemplate = shop_builder_category_template(currentCategory.id, "singleitem") %}
+    {% endif %}
+
+    {% if shopBuilderTemplate | trim is empty %}
+        {# No item template for default category found => use global item template #}
+        {% set shopBuilderTemplate = LayoutContainer.show("Ceres::SingleItemGlobal") %}
+    {% endif %}
+
+    {% if item.documents[0].data.item.add_cms_page > 0 and not isShopBuilder %}
+        {# Item template is configured for the item #}
+        {% include [category_template(item.documents[0].data.item.add_cms_page, lang, webstoreConfig.webstoreId)] %}
+    {% elseif shopBuilderTemplate | trim is not empty or isShopBuilder %}
+        {# Shopbuilder template #}
+        <div class="single container-max page-content">
+            <div class="row">
+                <div class="col">
+                    <single-item v-cloak item-data="{{ item | json_data }}" attributes-data="{{ attributes | json_data }}" variations="{{ variations | json_data }}">
+                        <template #default="{ getDataField: getDataField, getFilteredDataField: getFilteredDataField }">
+                            {{ shopBuilderTemplate | raw }}
+                        </template>
+                    </single-item>
+                </div>
+            </div>
+        </div>
+    {% elseif shop_builder_category_template_exists() %}
+        {# Empty shop builder template is loading #}
+    {% else %}
+        {# No item template defined in ShopBuilder => use default template from plugin #}
+        {% include "reiseschein::Item.SingleItemView" %}
+    {% endif %}
+
+{% endblock %}

@@ -1,0 +1,231 @@
+<script type="x/template" id="vue-fs-home-konfi">
+<div class="container-fluid home-konfi-container">
+    <div class="row home-konfi" id="FsHomeKonfi">
+        <div class="col-12">
+            <ul class="nav nav-tabs d-flex flex-nowrap">
+              <li class="nav-item">
+                <a class="nav-link text-uppercase pl-3 pr-4 active" data-toggle="tab" role="tab" href="#wohinja"><i class="fa fa-search mr-2" aria-hidden="true"></i> Schnellsuche</a>
+              </li>
+              <!--<li class="nav-item">
+              <a class="nav-link text-uppercase pl-3 pr-4" data-toggle="tab" role="tab" href="#wohinnein">Ich weiß nicht wohin</a>
+              </li>-->
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active filter-wrapper" id="wohinja" role="tabpanel">
+                    <div class="mr-lg-3 konfi-ort">
+                        <i class="fa fa-map-marker" aria-hidden="true"></i>
+                        <input type="text" class="form-control" :placeholder="queryField.label" id="homeKonfiQuery" v-model="query" @keyup="completeMe">
+                        <ul class="autocomplete-results" v-if="autocompleteOptions.length>0">
+                            <li @click="autocompleteSelect" v-for="item in autocompleteOptions" :data-value="item">${item}</li>
+                        </ul>
+                    </div>
+
+                    <div class="card" :class="field.class" v-for="field in faceteFields.fields">
+                        <div class="h3" @click="toggleMe"><i class="fa" aria-hidden="true"></i> ${ field.label }</div>
+                        <div>
+                            <div class="form-check" v-for="(option, key, index) in field.values[0]">
+                                <input :id="'option-' + key" class="form-check-input d-none" type="checkbox" @change="inputChange" :value="key">
+                                <label :for="'option-' + key" class="form-check-label">
+                                    ${ option }
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-secondary text-uppercase d-block" @click="submit"><i class="fa fa-search mr-2" aria-hidden="true"></i> Angebote finden</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</script>
+
+<script type="text/javascript">
+    Vue.component("fs-home-konfi", {
+        delimiters: ['${', '}'],
+        props: {
+            template    : String,
+            date        : String
+        },
+        data : function() {
+            return {
+                queryField      : {
+                    "label"         : null,
+                    "autocomplete"  : null
+                },
+                faceteFields    : [],
+                query           : "",
+                facets          : [],
+                autocompleteOptions : []
+            }
+        },
+        created: function(){
+            const _this     = this;
+            const _cookie   = JSON.parse(_this.getCookie("FsHomeKonfi"));
+            let _date       = null;
+
+            _this.$options.template = _this.template;
+
+            if(_cookie!=null){
+                for (var i = 0; i<_cookie.length; i++) {
+                  if (_cookie[i]["date"] != null) {
+                    _date = _cookie[i]["date"];
+                  }
+                }
+            }
+
+            if( (_date!=null)&&(_date==_this.date) ){
+                _this.initKonfi(_cookie);
+            }else{
+                _this.loadJson("/getJson");
+            }
+        },
+        methods: {
+            setCookie:function(cname, cvalue, exdays)
+            {
+                var d = new Date();
+
+                var position = cvalue.length-1;
+                cvalue = [cvalue.slice(0, position), ',{"date":"'+this.date+'"}', cvalue.slice(position)].join('');
+
+                d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+                var expires = "expires="+d.toUTCString();
+                document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+            },
+            getCookie:function(cname)
+            {
+                var name = cname + "=";
+                var ca = document.cookie.split(';');
+                for(var i = 0; i < ca.length; i++) {
+                    var c = ca[i];
+                    while (c.charAt(0) == ' ') {
+                        c = c.substring(1);
+                    }
+                    if (c.indexOf(name) == 0) {
+                        return c.substring(name.length, c.length);
+                    }
+                }
+                return null;
+            },
+            loadJson:function( url )
+            {
+                var xhttp = new XMLHttpRequest();
+                var _this = this;
+
+                xhttp.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        _this.setCookie("FsHomeKonfi", this.responseText, 1);
+                        _this.initKonfi(JSON.parse(this.responseText));
+                    }
+                };
+                xhttp.open("GET", url, true);
+                xhttp.send();
+            },
+            getQueryField: function(_obj)
+            {
+                var _this = this;
+
+                _this.queryField["autocomplete"] = _obj["values"].split(",,");
+                _this.queryField["label"] = _obj["label"];
+            },
+            getFacetFields: function(_obj)
+            {
+                var _this = this;
+                _this.faceteFields = _obj;
+            },
+            facetShowMore: function(values)
+            {
+                var _this = this;
+                return Object.keys(values).length > 3;
+            },
+            initKonfi: function(_config){
+                var _this = this;
+
+                for(var i=0; i < _config.length; i++){
+                    if ( (_config[i].type!=null) && (_config[i].type == "query") ){
+                        _this.getQueryField(_config[i]);
+                    }else if( _config[i].type == "facetten" ){
+                        _this.getFacetFields(_config[i]);
+                    }
+                }
+            },
+            submit : function ()
+            {
+                var _this = this;
+                var url = "/search";
+                if(_this.query!="") {
+                    url+="?query="+_this.query;
+                    if( _this.facets.length ){
+                        url+="&facets="+_this.facets.join(',');
+                    }
+                    window.location.href = url;
+                }
+            },
+            filterAutoCompleteList(str)
+            {
+                return function(element){
+                    var elm = element.toLowerCase().replace(/ä/g, 'a').replace(/ö/g, 'o').replace(/ü/g, 'u').replace(/ß/g, 'ss');
+                    return elm.indexOf(str.toLowerCase().replace(/ä/g, 'a').replace(/ö/g, 'o').replace(/ü/g, 'u').replace(/ß/g, 'ss'))>-1;
+                }
+            },
+            completeMe : function (event)
+            {
+                var _this   = this;
+                var str     = $(event.target).val();
+                if (str.length>2) {
+                    _this.autocompleteOptions = _this.queryField.autocomplete.filter(_this.filterAutoCompleteList(str));
+
+                    if((event.key=="ArrowDown")||(event.key=="ArrowUp")){
+                        if ( $("ul.autocomplete-results").length ){
+                            var active  = $("ul.autocomplete-results li.active");
+                            var prev    = active.length > 0 ? active.prev() : $("ul.autocomplete-results li:first-child");
+                            var next    = active.length > 0 ? active.next() : $("ul.autocomplete-results li:first-child");
+
+                            if((event.key=="ArrowDown")&&(next.length>0)){
+                                $(active).removeClass("active");
+                                next.addClass("active");
+                            }else if ((event.key=="ArrowUp")&&(prev.length>0)){
+                                $(active).removeClass("active");
+                                prev.addClass("active");
+                            }
+                        }
+                    }
+                    if(event.key=="Enter"){
+                        var active  = $("ul.autocomplete-results li.active");
+                        if (active.length>0){
+                            _this.query = active.attr("data-value");
+                            _this.autocompleteOptions = [];
+                        }
+                    }
+                }else{
+                    _this.autocompleteOptions = [];
+                }
+            },
+            autocompleteSelect : function(event)
+            {
+                var _this = this;
+                var str = $(event.target).attr("data-value");
+                _this.query = str;
+                _this.autocompleteOptions = [];
+            },
+            toggleMe : function(event)
+            {
+                $(event.target).toggleClass("active");
+            },
+            inputChange(event)
+            {
+                var _this = this;
+                $(event.target).parent().toggleClass("active");
+                console.log("toggled2");
+                if( event.target.checked ) {
+
+                    _this.facets.push( event.target.value );
+                    console.log("facets: ", _this.facets);
+                }else if ( _this.facets.includes(event.target.value)) {
+                    var _i = _this.facets.indexOf(event.target.value);
+                    _this.facets.splice(_i, 1);
+                }
+            }
+        }
+    });
+</script>

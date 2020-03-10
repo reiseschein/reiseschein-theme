@@ -1,0 +1,578 @@
+{% import "Ceres::PageDesign.Macros.LayoutContainer" as LayoutContainer %}
+{% import "Ceres::PageDesign.Macros.ItemName" as ItemName %}
+
+{{ component( "reiseschein::ItemList.Components.CategoryItem") }}
+{{ component( "Ceres::PageDesign.Components.Carousel" ) }}
+
+{% set lang = services.sessionStorage.getLang() %}
+{% set seotext = services.category.get(config("reiseschein.homepage.seotext"), lang) %}
+{% set globalBackgroundImage = config("reiseschein.homepage.globalBackgroundImage") %}
+{% set headingtopitems = config("reiseschein.homepage.topitems") %}
+
+<div class="container-fluid home bgimg-wrapper" style="background-image: url( {{ globalBackgroundImage }} );">
+	<div class="container-max">
+		<div class="row">
+	             <div class="col-12 col-sm-10 offset-sm-1 col-lg-12 offset-lg-0 col-xl-10 offset-xl-1 py-5">
+					 <h1 class="withline mb-4 mx-2 mx-sm-4 mx-md-0"><span>{{ headingtopitems|raw }}</span></h1>
+			      	{% set productIDS = config("reiseschein.homepage.itemIds")|split(',') %}
+					<div class="row">
+						<div class="col-12 col-md-10 offset-md-1 col-lg-8 offset-lg-2 col-xl-12 offset-xl-0">
+					      	<div class="owl-carousel product-list home-first-list mx-0">
+						      	{% for id in productIDS %}
+								{% set item = services.item.getVariation(id) %}
+								{% if item.documents|length > 0 %}
+								<div class="cat-item {% if loop.index == 1 %}top-1{% elseif loop.index == 2 %}top-2{% elseif loop.last %}top-3{% endif %} mx-sm-5 mx-xl-0">
+
+
+
+									<div class="hcItem{% if not item.documents[0].data.variation.weightNetG > 0 %} hcItem-none{% endif %} d-none">{{ item.documents[0].data.variation.weightNetG }}</div>
+
+									{% set freevar = getFree(item.documents[0].data.item.id) %}
+									{% set freeArray = freevar.free17|split('[') %}
+					                            {% set catName = '' %}
+					                            {% set persons = '' %}
+					                            {% set nights = '' %}
+					                            {% set food = '' %}
+					                            {% set valid = '' %}
+					                            {% set icons = '' %}
+					                            {% set iconsArray = '' %}
+					                            {% set stars = '' %}
+					                            {% set prices = '' %}
+					                            {% set pricesArray = '' %}
+
+					                            {% for free in freeArray %}
+					                                {% if free starts with '2]' %}{% set catName = free[2:] %}{% endif %}
+					                                {% if free starts with '3]' %}{% set persons = free[2:] %}{% endif %}
+					                                {% if free starts with '4]' %}{% set nights = free[2:] %}{% endif %}
+					                                {% if free starts with '5]' %}{% set food = free[2:] %}{% endif %}
+					                                {% if free starts with '6]' %}{% set valid = free[2:] %}{% endif %}
+					                                {% if free starts with '8]' %}{% set icons = free[2:] %}{% set iconsArray = icons|split(',') %}{% endif %}
+					                                {% if free starts with '9]' %}{% set stars = free[2:] %}{% endif %}
+					                                {% if free starts with '10]' %}{% set prices = free[3:] %}{% set pricesArray = prices|split(',') %}{% endif %}
+					                            {% endfor %}
+									<span class="d-none persons-temp">{{ persons }}</span>
+									<span class="d-none nights-temp">{{ nights }}</span>
+									<span class="d-none food-temp">{{ food }}</span>
+									<span class="d-none valid-temp">{{ valid }}</span>
+
+									{% for icon in iconsArray %}
+									<span class="d-none">
+										{% if icon == 1 %}<item-lazy-img ref="itemLazyImage" template="#vue-item-lazy-img" alt="WLAN Icon" class="icons-wlan-temp img-fluid" image-url="https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/FS_assets/wlan.svg"></item-lazy-img>{% endif %}
+										{% if icon == 2 %}<item-lazy-img ref="itemLazyImage" template="#vue-item-lazy-img" alt="Restaurant Icon" class="icons-restaurant-temp img-fluid" image-url="https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/FS_assets/restaurant.svg"></item-lazy-img>{% endif %}
+										{% if icon == 3 %}<item-lazy-img ref="itemLazyImage" template="#vue-item-lazy-img" alt="Bar Icon" class="icons-bar-temp img-fluid" image-url="https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/FS_assets/bar2.svg"></item-lazy-img>{% endif %}
+										{% if icon == 4 %}<item-lazy-img ref="itemLazyImage" template="#vue-item-lazy-img" alt="Spa und Wellness Icon" class="icons-spa-temp img-fluid" image-url="https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/FS_assets/spa.svg"></item-lazy-img>{% endif %}
+										{% if icon == 5 %}<item-lazy-img ref="itemLazyImage" template="#vue-item-lazy-img" alt="Pool Icon" class="icons-pool-temp img-fluid" image-url="https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/FS_assets/pool.svg"></item-lazy-img>{% endif %}
+										{% if icon == 6 %}<item-lazy-img ref="itemLazyImage" template="#vue-item-lazy-img" alt="Fitness Icon" class="icons-fitness-temp img-fluid" image-url="https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/FS_assets/fitness.svg"></item-lazy-img>{% endif %}
+										{% if icon == 7 %}<item-lazy-img ref="itemLazyImage" template="#vue-item-lazy-img" alt="Parkplatz Icon" class="icons-parkplatz-temp img-fluid" image-url="https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/FS_assets/parkplatz.svg"></item-lazy-img>{% endif %}
+										{% if icon == 8 %}<item-lazy-img ref="itemLazyImage" template="#vue-item-lazy-img" alt="24 Stunden Icon" class="icons-24h-temp img-fluid" image-url="https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/FS_assets/24h.svg"></item-lazy-img>{% endif %}
+										{% if icon == 9 %}<item-lazy-img ref="itemLazyImage" template="#vue-item-lazy-img" alt="Fahrstuhl Icon" class="icons-fahrstuhl-temp img-fluid" image-url="https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/FS_assets/fahrstuhl.svg"></item-lazy-img>{% endif %}
+										{% if icon == 10 %}<item-lazy-img ref="itemLazyImage" template="#vue-item-lazy-img" alt="Haustiere Icon" class="icons-haustiere-temp img-fluid" image-url="https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/FS_assets/haustiere.svg"></item-lazy-img>{% endif %}
+									</span>
+									{% endfor %}
+									<div class="list-box-topbar px-3 py-2 d-flex justify-content-between">
+										<div class="list-box-topbar-left">
+											<strong>{{ catName }}</strong>
+										</div>
+										<div class="list-box-topbar-right small">
+											<span class="stars stars_{{ stars }}"></span>
+										</div>
+									</div>
+									{% if loop.index == 1 or loop.index == 2 or loop.last %}
+										<div class="top-badge">
+											<div class="top-badge-inner">
+												<span>TOP</span>
+												<div>#{% if loop.index == 1 %}1{% elseif loop.index == 2 %}2{% elseif loop.last %}3{% endif %}</div>
+											</div>
+											<div class="top-badge-bg"></div>
+										</div>
+									{% endif %}
+										<category-item
+								                        :item-data="{{ item.documents[0].data | json_encode }}"
+								                        :decimal-count="{{ ceresConfig.item.storeSpecial }}"
+								                        :disable-carousel-on-mobile="true"
+														:disable-lazy-load="true">
+								                    <template slot="BeforePrices">{{ LayoutContainer.show("Ceres::CategoryItem.BeforePrices", item.data) }}</template>
+								                    <template slot="AfterPrices">{{ LayoutContainer.show("Ceres::CategoryItem.AfterPrices", item.data) }}</template>
+
+										      <a href="{{ item.data | itemURL }}" class="small">
+						                                    <i class="fa fa-image"></i>
+						                                    <span>{{ item.data | itemName }}</span>
+						                                </a>
+										  </category-item>
+						              </div>
+									  {% endif %}
+					          	{% endfor %}
+					      </div>
+					  </div>
+				  </div>
+	             </div>
+		</div>
+
+
+	</div><!-- end Top angebote der Woche -->
+	{% set homepageContainer1 = LayoutContainer.show("Ceres::Homepage.Container1") %}
+	{% if homepageContainer1 | trim is not empty %}
+		{{ homepageContainer1 }}
+	{% endif %}
+	<div class="row bg-secondary pt-5 pb-4 py-sm-5">
+		<div class="container-max">
+			<div class="col-12 row justify-content-between mx-auto align-items-center">
+				<div class="icons-left">
+					<span> <i class="fa fa-print" aria-hidden="true">&nbsp;</i> Sofort druckbar</span>
+					<span> <i class="fa fa-envelope-o" aria-hidden="true">&nbsp;</i> 24h E-Mail Versand</span>
+				</div>
+				<div class="slogan-center text-center">
+					<p> Die neue art zu reisen</p>
+					<p>reiseschein - hotelgutschein - kurzreisen </p>
+					<p>
+						<span><i aria-hidden="true" class="fa fa-star">&nbsp;</i>geprüfte hotels </span>
+						<span><i aria-hidden="true" class="fa fa-star">&nbsp;</i>24h Sofort Lieferbar </span>
+						<span><i aria-hidden="true" class="fa fa-star">&nbsp;</i>10 Jahre Erfahrung</span>
+					</p>
+				</div>
+				<div class="icons-right">
+					<span> <i class="fa fa-shield" aria-hidden="true">&nbsp;</i> Geprüfte Hotels</span>
+					<span> <i class="fa fa-gift" aria-hidden="true">&nbsp;</i> Ideales Geschenk</span>
+				</div>
+			</div>
+		</div>
+	</div>
+</div><!-- end for container-fluid home -->
+
+
+<div class="container-fluid home-bg-grey">
+	<div class="container-max">
+		<div class="row">
+	             <div class="col-12 py-4 mb-4">
+			      <div class="img-letter">
+				      <svg xmlns="http://www.w3.org/2000/svg" width="45" height="41" viewBox="0 0 177.71 160.14"><path id="Ebene_1-2" d="M173.93 124.06a6.84 6.84 0 0 0-9.18 3.05c-4.21 8.4-9.35 13.11-15.73 14.38-16.87 3.36-42.08-16.18-64.37-35.18q3.12-.23 6.26-.56c18.2-1.9 50.23-7.72 60.27-25.47 7.49-13.25 7.52-31.48.07-48.77-7-16.18-18.84-27.74-31.76-30.94C114-.8 108.24.31 102.94 3.79 89.08 12.87 76.32 39 64 83.62 45.66 65.44 30.71 53.7 17.86 53.7h-.69a17.83 17.83 0 0 0-13.44 6.67c-4.86 5.86-5 14-.29 21.81 5.82 9.71 18.2 17.94 33.94 22.59a106.52 106.52 0 0 0 20.23 3.8c-5.71 24.22-9 43.33-9 43.57a6.84 6.84 0 1 0 13.49 2.29c0-.24 3.18-18.6 8.68-42 24.43 21.07 51.27 43.12 74.38 43.12a33.47 33.47 0 0 0 6.56-.63c10.64-2.12 19.15-9.41 25.29-21.67a6.84 6.84 0 0 0-3.08-9.19zm-158.63-49c-.73-1.21-2.28-4.22-.92-5.85a4 4 0 0 1 3.25-1.66h.21c2.88 0 9.58 1.83 23.05 13.4 4.66 4 9.52 8.63 14.36 13.47C33.47 91.6 19.86 82.65 15.3 75.06zm61 15.49c15.15-56 27.91-71.21 34.17-75.31a12.14 12.14 0 0 1 5.77-1.38c8.66 2.14 17.27 11 22.48 23.07 5.68 13.18 5.9 27.22.58 36.62-4.9 8.66-24.43 16-49.77 18.6-4.62.48-9.3.79-13.91.94z"></path></svg>
+			      </div>
+			      	<h3 class="h3 headline-strike mb-4"><span>Unsere Multi-Deals</span></h3>
+
+					<div class="row">
+						<div class="col-12 col-md-6 offset-md-3 col-xl-10 offset-xl-1 py-0 py-md-4">
+				      		{% set productMultiIDS = config("reiseschein.homepage.multidealsIds")|split(',') %}
+					      	<div class="custom-list-item-carousel default-home-carousel owl-carousel product-list">
+						      	{% for id in productMultiIDS %}
+									{% set item = services.item.getVariation(id) %}
+									{% if item.documents|length > 0 %}
+								   	<div class="cat-item">
+
+										{% set freevar = getFree(item.documents[0].data.item.id) %}
+										{% set freeArray = freevar.free17|split('[') %}
+										   {% set catName = '' %}
+										   {% set persons = '' %}
+										   {% set nights = '' %}
+										   {% set food = '' %}
+										   {% set valid = '' %}
+										   {% set icons = '' %}
+										   {% set iconsArray = '' %}
+										   {% set stars = '' %}
+										   {% set prices = '' %}
+										   {% set pricesArray = '' %}
+
+										   {% for free in freeArray %}
+											   {% if free starts with '2]' %}{% set catName = free[2:] %}{% endif %}
+											   {% if free starts with '3]' %}{% set persons = free[2:] %}{% endif %}
+											   {% if free starts with '4]' %}{% set nights = free[2:] %}{% endif %}
+											   {% if free starts with '5]' %}{% set food = free[2:] %}{% endif %}
+											   {% if free starts with '6]' %}{% set valid = free[2:] %}{% endif %}
+											   {% if free starts with '8]' %}{% set icons = free[2:] %}{% set iconsArray = icons|split(',') %}{% endif %}
+											   {% if free starts with '9]' %}{% set stars = free[2:] %}{% endif %}
+											   {% if free starts with '10]' %}{% set prices = free[3:] %}{% set pricesArray = prices|split(',') %}{% endif %}
+										   {% endfor %}
+										<span class="d-none persons-temp">{{ persons }}</span>
+										<span class="d-none nights-temp">{{ nights }}</span>
+										<span class="d-none food-temp">{{ food }}</span>
+										<span class="d-none valid-temp">{{ valid }}</span>
+
+										{% for icon in iconsArray %}
+										<span class="d-none">
+											{% if icon == 1 %}<item-lazy-img ref="itemLazyImage" template="#vue-item-lazy-img" alt="WLAN Icon" class="icons-wlan-temp img-fluid" image-url="https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/FS_assets/wlan.svg"></item-lazy-img>{% endif %}
+											{% if icon == 2 %}<item-lazy-img ref="itemLazyImage" template="#vue-item-lazy-img" alt="Restaurant Icon" class="icons-restaurant-temp img-fluid" image-url="https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/FS_assets/restaurant.svg"></item-lazy-img>{% endif %}
+											{% if icon == 3 %}<item-lazy-img ref="itemLazyImage" template="#vue-item-lazy-img" alt="Bar Icon" class="icons-bar-temp img-fluid" image-url="https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/FS_assets/bar2.svg"></item-lazy-img>{% endif %}
+											{% if icon == 4 %}<item-lazy-img ref="itemLazyImage" template="#vue-item-lazy-img" alt="Spa und Wellness Icon" class="icons-spa-temp img-fluid" image-url="https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/FS_assets/spa.svg"></item-lazy-img>{% endif %}
+											{% if icon == 5 %}<item-lazy-img ref="itemLazyImage" template="#vue-item-lazy-img" alt="Pool Icon" class="icons-pool-temp img-fluid" image-url="https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/FS_assets/pool.svg"></item-lazy-img>{% endif %}
+											{% if icon == 6 %}<item-lazy-img ref="itemLazyImage" template="#vue-item-lazy-img" alt="Fitness Icon" class="icons-fitness-temp img-fluid" image-url="https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/FS_assets/fitness.svg"></item-lazy-img>{% endif %}
+											{% if icon == 7 %}<item-lazy-img ref="itemLazyImage" template="#vue-item-lazy-img" alt="Parkplatz Icon" class="icons-parkplatz-temp img-fluid" image-url="https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/FS_assets/parkplatz.svg"></item-lazy-img>{% endif %}
+											{% if icon == 8 %}<item-lazy-img ref="itemLazyImage" template="#vue-item-lazy-img" alt="24 Stunden Icon" class="icons-24h-temp img-fluid" image-url="https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/FS_assets/24h.svg"></item-lazy-img>{% endif %}
+											{% if icon == 9 %}<item-lazy-img ref="itemLazyImage" template="#vue-item-lazy-img" alt="Fahrstuhl Icon" class="icons-fahrstuhl-temp img-fluid" image-url="https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/FS_assets/fahrstuhl.svg"></item-lazy-img>{% endif %}
+											{% if icon == 10 %}<item-lazy-img ref="itemLazyImage" template="#vue-item-lazy-img" alt="Haustiere Icon" class="icons-haustiere-temp img-fluid" image-url="https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/FS_assets/haustiere.svg"></item-lazy-img>{% endif %}
+										</span>
+										{% endfor %}
+										<div class="list-box-topbar px-3 py-2 d-flex justify-content-between">
+											<div class="list-box-topbar-left">
+												<strong>{{ catName }}</strong>
+											</div>
+											<div class="list-box-topbar-right small">
+												<span class="stars stars_{{ stars }}"></span>
+											</div>
+										</div>
+
+										<category-item
+								                        :item-data="{{ item.documents[0].data | json_encode }}"
+								                        :decimal-count="{{ ceresConfig.item.storeSpecial }}"
+								                        :disable-carousel-on-mobile="true"
+														:disable-lazy-load="true">
+								                    <template slot="BeforePrices">{{ LayoutContainer.show("Ceres::CategoryItem.BeforePrices", item.data) }}</template>
+								                    <template slot="AfterPrices">{{ LayoutContainer.show("Ceres::CategoryItem.AfterPrices", item.data) }}</template>
+
+										      <a href="{{ item.data | itemURL }}" class="small">
+						                                    <i class="fa fa-image"></i>
+						                                    <span>{{ item.data | itemName }}</span>
+						                                </a>
+										  </category-item>
+						              </div>
+									  {% endif %}
+					          	{% endfor %}
+					      </div>
+					  </div>
+				  </div>
+	             </div>
+		</div>
+	</div><!-- end Top MultiDeals -->
+</div>
+
+
+{% set HighlightLink1 = config("reiseschein.homepage.HighlightLink1") %}
+{% set HighlightImage1 = config("reiseschein.homepage.HighlightImage1") %}
+{% set HighlightText1 = config("reiseschein.homepage.HighlightText1") %}
+
+{% set HighlightLink2 = config("reiseschein.homepage.HighlightLink2") %}
+{% set HighlightImage2 = config("reiseschein.homepage.HighlightImage2") %}
+{% set HighlightText2 = config("reiseschein.homepage.HighlightText2") %}
+
+{% set HighlightLink3 = config("reiseschein.homepage.HighlightLink3") %}
+{% set HighlightImage3 = config("reiseschein.homepage.HighlightImage3") %}
+{% set HighlightText3 = config("reiseschein.homepage.HighlightText3") %}
+
+{% set HighlightLink4 = config("reiseschein.homepage.HighlightLink4") %}
+{% set HighlightImage4 = config("reiseschein.homepage.HighlightImage4") %}
+{% set HighlightText4 = config("reiseschein.homepage.HighlightText4") %}
+
+{% set HighlightLink5 = config("reiseschein.homepage.HighlightLink5") %}
+{% set HighlightImage5 = config("reiseschein.homepage.HighlightImage5") %}
+{% set HighlightText5 = config("reiseschein.homepage.HighlightText5") %}
+
+{% set HighlightLink6 = config("reiseschein.homepage.HighlightLink6") %}
+{% set HighlightImage6 = config("reiseschein.homepage.HighlightImage6") %}
+{% set HighlightText6 = config("reiseschein.homepage.HighlightText6") %}
+
+{% set HighlightLink7 = config("reiseschein.homepage.HighlightLink7") %}
+{% set HighlightImage7 = config("reiseschein.homepage.HighlightImage7") %}
+{% set HighlightText7 = config("reiseschein.homepage.HighlightText7") %}
+
+{% set HighlightLink8 = config("reiseschein.homepage.HighlightLink8") %}
+{% set HighlightImage8 = config("reiseschein.homepage.HighlightImage8") %}
+{% set HighlightText8 = config("reiseschein.homepage.HighlightText8") %}
+
+<div class="container-fluid highlight-carousel home-bg-light">
+	<div class="container-max">
+		<div class="row py-2 py-md-4">
+
+			<div class="col-12 py-0 py-md-3">
+				<div class="img-letter">
+					<svg xmlns="http://www.w3.org/2000/svg" width="45" height="41" viewBox="0 0 177.71 160.14"><path id="Ebene_1-2" d="M173.93 124.06a6.84 6.84 0 0 0-9.18 3.05c-4.21 8.4-9.35 13.11-15.73 14.38-16.87 3.36-42.08-16.18-64.37-35.18q3.12-.23 6.26-.56c18.2-1.9 50.23-7.72 60.27-25.47 7.49-13.25 7.52-31.48.07-48.77-7-16.18-18.84-27.74-31.76-30.94C114-.8 108.24.31 102.94 3.79 89.08 12.87 76.32 39 64 83.62 45.66 65.44 30.71 53.7 17.86 53.7h-.69a17.83 17.83 0 0 0-13.44 6.67c-4.86 5.86-5 14-.29 21.81 5.82 9.71 18.2 17.94 33.94 22.59a106.52 106.52 0 0 0 20.23 3.8c-5.71 24.22-9 43.33-9 43.57a6.84 6.84 0 1 0 13.49 2.29c0-.24 3.18-18.6 8.68-42 24.43 21.07 51.27 43.12 74.38 43.12a33.47 33.47 0 0 0 6.56-.63c10.64-2.12 19.15-9.41 25.29-21.67a6.84 6.84 0 0 0-3.08-9.19zm-158.63-49c-.73-1.21-2.28-4.22-.92-5.85a4 4 0 0 1 3.25-1.66h.21c2.88 0 9.58 1.83 23.05 13.4 4.66 4 9.52 8.63 14.36 13.47C33.47 91.6 19.86 82.65 15.3 75.06zm61 15.49c15.15-56 27.91-71.21 34.17-75.31a12.14 12.14 0 0 1 5.77-1.38c8.66 2.14 17.27 11 22.48 23.07 5.68 13.18 5.9 27.22.58 36.62-4.9 8.66-24.43 16-49.77 18.6-4.62.48-9.3.79-13.91.94z"></path></svg>
+				</div>
+				<h3 class="h3 headline-strike"><span>Unsere Empfehlungen</span></h3>
+		  	</div>
+
+	             <div class="col-12 pb-0 pb-md-3">
+			      	<div class="cat-highlight list-item-carousel owl-carousel owl-theme my-3">
+			      		<div class="highlight-wrapper">
+			      			<a href="{{ HighlightLink1 }}">
+								<img src="{{ HighlightImage1 }}" alt="{{ HighlightText1 }}" class="img-fluid">
+								<span>{{ HighlightText1 }}</span>
+							</a>
+			      		</div>
+			      		<div class="highlight-wrapper">
+						<a href="{{ HighlightLink2 }}">
+							<img alt="{{ HighlightText2 }}" src="{{ HighlightImage2 }}" class="img-fluid">
+							<span>{{ HighlightText2 }}</span>
+						</a>
+			      		</div>
+			      		<div class="highlight-wrapper">
+						<a href="{{ HighlightLink3 }}">
+							<img alt="{{ HighlightText3 }}" src="{{ HighlightImage3 }}" class="img-fluid">
+							<span>{{ HighlightText3 }}</span>
+						</a>
+			      		</div>
+			      		<div class="highlight-wrapper">
+						<a href="{{ HighlightLink4 }}">
+							<img alt="{{ HighlightText4 }}" src="{{ HighlightImage4 }}" class="img-fluid">
+							<span>{{ HighlightText4 }}</span>
+						</a>
+			      		</div>
+			      		{% if HighlightImage5 != "" %}
+						<div class="highlight-wrapper">
+						<a href="{{ HighlightLink5 }}">
+							<img alt="{{ HighlightText5 }}" src="{{ HighlightImage5 }}" class="img-fluid">
+							<span>{{ HighlightText5 }}</span>
+						</a>
+			      		</div>
+						{% endif %}
+						{% if HighlightImage6 != "" %}
+			      		<div class="highlight-wrapper">
+						<a href="{{ HighlightLink6 }}">
+							<img alt="{{ HighlightText6 }}" src="{{ HighlightImage6 }}" class="img-fluid">
+							<span>{{ HighlightText6 }}</span>
+						</a>
+			      		</div>
+						{% endif %}
+						{% if HighlightImage7 != "" %}
+			      		<div class="highlight-wrapper">
+						<a href="{{ HighlightLink7 }}">
+							<img alt="{{ HighlightText7 }}" src="{{ HighlightImage7 }}" class="img-fluid">
+							<span>{{ HighlightText7 }}</span>
+						</a>
+			      		</div>
+						{% endif %}
+						{% if HighlightImage8 != "" %}
+			      		<div class="highlight-wrapper">
+						<a href="{{ HighlightLink8 }}">
+							<img alt="{{ HighlightText8 }}" src="{{ HighlightImage8 }}" class="img-fluid">
+							<span>{{ HighlightText8 }}</span>
+						</a>
+			      		</div>
+						{% endif %}
+				</div>
+		      </div>
+	      </div>
+      </div>
+</div><!-- end highlight-carousel fluid-->
+
+
+
+<div class="container-fluid home-bg-grey">
+	<div class="container-max">
+		<div class="row">
+	             <div class="col-12 py-4 mb-4">
+					<div class="img-letter">
+						<svg xmlns="http://www.w3.org/2000/svg" width="45" height="41" viewBox="0 0 177.71 160.14"><path id="Ebene_1-2" d="M173.93 124.06a6.84 6.84 0 0 0-9.18 3.05c-4.21 8.4-9.35 13.11-15.73 14.38-16.87 3.36-42.08-16.18-64.37-35.18q3.12-.23 6.26-.56c18.2-1.9 50.23-7.72 60.27-25.47 7.49-13.25 7.52-31.48.07-48.77-7-16.18-18.84-27.74-31.76-30.94C114-.8 108.24.31 102.94 3.79 89.08 12.87 76.32 39 64 83.62 45.66 65.44 30.71 53.7 17.86 53.7h-.69a17.83 17.83 0 0 0-13.44 6.67c-4.86 5.86-5 14-.29 21.81 5.82 9.71 18.2 17.94 33.94 22.59a106.52 106.52 0 0 0 20.23 3.8c-5.71 24.22-9 43.33-9 43.57a6.84 6.84 0 1 0 13.49 2.29c0-.24 3.18-18.6 8.68-42 24.43 21.07 51.27 43.12 74.38 43.12a33.47 33.47 0 0 0 6.56-.63c10.64-2.12 19.15-9.41 25.29-21.67a6.84 6.84 0 0 0-3.08-9.19zm-158.63-49c-.73-1.21-2.28-4.22-.92-5.85a4 4 0 0 1 3.25-1.66h.21c2.88 0 9.58 1.83 23.05 13.4 4.66 4 9.52 8.63 14.36 13.47C33.47 91.6 19.86 82.65 15.3 75.06zm61 15.49c15.15-56 27.91-71.21 34.17-75.31a12.14 12.14 0 0 1 5.77-1.38c8.66 2.14 17.27 11 22.48 23.07 5.68 13.18 5.9 27.22.58 36.62-4.9 8.66-24.43 16-49.77 18.6-4.62.48-9.3.79-13.91.94z"></path></svg>
+					</div>
+					<h3 class="h3 headline-strike mb-4"><span>Unsere Bestseller</span></h3>
+
+					<div class="row">
+						<div class="col-12 col-md-6 offset-md-3 col-xl-10 offset-xl-1 py-0 py-md-4">
+					      	{% set productbestsellerIDS = config("reiseschein.homepage.bestsellerIds")|split(',') %}
+					      	<div class="custom-list-item-carousel default-home-carousel owl-carousel product-list">
+						      	{% for id in productbestsellerIDS %}
+
+								{% set item = services.item.getVariation(id) %}
+								{% if item.documents|length > 0 %}
+								<div class="cat-item">
+
+									{% set freevar = getFree(item.documents[0].data.item.id) %}
+									{% set freeArray = freevar.free17|split('[') %}
+									   {% set catName = '' %}
+									   {% set persons = '' %}
+									   {% set nights = '' %}
+									   {% set food = '' %}
+									   {% set valid = '' %}
+									   {% set icons = '' %}
+									   {% set iconsArray = '' %}
+									   {% set stars = '' %}
+									   {% set prices = '' %}
+									   {% set pricesArray = '' %}
+
+									   {% for free in freeArray %}
+										   {% if free starts with '2]' %}{% set catName = free[2:] %}{% endif %}
+										   {% if free starts with '3]' %}{% set persons = free[2:] %}{% endif %}
+										   {% if free starts with '4]' %}{% set nights = free[2:] %}{% endif %}
+										   {% if free starts with '5]' %}{% set food = free[2:] %}{% endif %}
+										   {% if free starts with '6]' %}{% set valid = free[2:] %}{% endif %}
+										   {% if free starts with '8]' %}{% set icons = free[2:] %}{% set iconsArray = icons|split(',') %}{% endif %}
+										   {% if free starts with '9]' %}{% set stars = free[2:] %}{% endif %}
+										   {% if free starts with '10]' %}{% set prices = free[3:] %}{% set pricesArray = prices|split(',') %}{% endif %}
+									   {% endfor %}
+									<span class="d-none persons-temp">{{ persons }}</span>
+									<span class="d-none nights-temp">{{ nights }}</span>
+									<span class="d-none food-temp">{{ food }}</span>
+									<span class="d-none valid-temp">{{ valid }}</span>
+
+									{% for icon in iconsArray %}
+									<span class="d-none">
+										{% if icon == 1 %}<item-lazy-img ref="itemLazyImage" template="#vue-item-lazy-img" alt="WLAN Icon" class="icons-wlan-temp img-fluid" image-url="https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/FS_assets/wlan.svg"></item-lazy-img>{% endif %}
+										{% if icon == 2 %}<item-lazy-img ref="itemLazyImage" template="#vue-item-lazy-img" alt="Restaurant Icon" class="icons-restaurant-temp img-fluid" image-url="https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/FS_assets/restaurant.svg"></item-lazy-img>{% endif %}
+										{% if icon == 3 %}<item-lazy-img ref="itemLazyImage" template="#vue-item-lazy-img" alt="Bar Icon" class="icons-bar-temp img-fluid" image-url="https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/FS_assets/bar2.svg"></item-lazy-img>{% endif %}
+										{% if icon == 4 %}<item-lazy-img ref="itemLazyImage" template="#vue-item-lazy-img" alt="Spa und Wellness Icon" class="icons-spa-temp img-fluid" image-url="https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/FS_assets/spa.svg"></item-lazy-img>{% endif %}
+										{% if icon == 5 %}<item-lazy-img ref="itemLazyImage" template="#vue-item-lazy-img" alt="Pool Icon" class="icons-pool-temp img-fluid" image-url="https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/FS_assets/pool.svg"></item-lazy-img>{% endif %}
+										{% if icon == 6 %}<item-lazy-img ref="itemLazyImage" template="#vue-item-lazy-img" alt="Fitness Icon" class="icons-fitness-temp img-fluid" image-url="https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/FS_assets/fitness.svg"></item-lazy-img>{% endif %}
+										{% if icon == 7 %}<item-lazy-img ref="itemLazyImage" template="#vue-item-lazy-img" alt="Parkplatz Icon" class="icons-parkplatz-temp img-fluid" image-url="https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/FS_assets/parkplatz.svg"></item-lazy-img>{% endif %}
+										{% if icon == 8 %}<item-lazy-img ref="itemLazyImage" template="#vue-item-lazy-img" alt="24 Stunden Icon" class="icons-24h-temp img-fluid" image-url="https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/FS_assets/24h.svg"></item-lazy-img>{% endif %}
+										{% if icon == 9 %}<item-lazy-img ref="itemLazyImage" template="#vue-item-lazy-img" alt="Fahrstuhl Icon" class="icons-fahrstuhl-temp img-fluid" image-url="https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/FS_assets/fahrstuhl.svg"></item-lazy-img>{% endif %}
+										{% if icon == 10 %}<item-lazy-img ref="itemLazyImage" template="#vue-item-lazy-img" alt="Haustiere Icon" class="icons-haustiere-temp img-fluid" image-url="https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/FS_assets/haustiere.svg"></item-lazy-img>{% endif %}
+									</span>
+									{% endfor %}
+									<div class="list-box-topbar px-3 py-2 d-flex justify-content-between">
+										<div class="list-box-topbar-left">
+											<strong>{{ catName }}</strong>
+										</div>
+										<div class="list-box-topbar-right small">
+											<span class="stars stars_{{ stars }}"></span>
+										</div>
+									</div>
+
+									<category-item
+													:item-data="{{ item.documents[0].data | json_encode }}"
+													:decimal-count="{{ ceresConfig.item.storeSpecial }}"
+													:disable-carousel-on-mobile="true"
+													:disable-lazy-load="true">
+												<template slot="BeforePrices">{{ LayoutContainer.show("Ceres::CategoryItem.BeforePrices", item.data) }}</template>
+												<template slot="AfterPrices">{{ LayoutContainer.show("Ceres::CategoryItem.AfterPrices", item.data) }}</template>
+
+										  <a href="{{ item.data | itemURL }}" class="small">
+														<i class="fa fa-image"></i>
+														<span>{{ item.data | itemName }}</span>
+													</a>
+									  </category-item>
+								  </div>
+								  {% endif %}
+					          	{% endfor %}
+					      </div>
+						  </div>
+				  </div>
+	             </div>
+		</div>
+	</div>
+</div><!-- end Bestseller -->
+
+
+<div class="container-fluid px-0 home">
+	<div class="frame-container">
+		<iframe src="https://sales.reiseschein.de/public_html/GoogleMapsV1/index.html" name="Kartensuche" scrolling="no" frameborder="0" align=aus marginheight="0px" marginwidth="0px"></iframe>
+	</div>
+</div>
+
+
+
+<div class="container-fluid home-bg-light d-none d-lg-block">
+	<div class="container-max py-5">
+		<div class="row">
+             <div class="col-12 pb-5 pt-4">
+				 <div class="img-letter">
+					 <svg xmlns="http://www.w3.org/2000/svg" width="45" height="41" viewBox="0 0 177.71 160.14"><path id="Ebene_1-2" d="M173.93 124.06a6.84 6.84 0 0 0-9.18 3.05c-4.21 8.4-9.35 13.11-15.73 14.38-16.87 3.36-42.08-16.18-64.37-35.18q3.12-.23 6.26-.56c18.2-1.9 50.23-7.72 60.27-25.47 7.49-13.25 7.52-31.48.07-48.77-7-16.18-18.84-27.74-31.76-30.94C114-.8 108.24.31 102.94 3.79 89.08 12.87 76.32 39 64 83.62 45.66 65.44 30.71 53.7 17.86 53.7h-.69a17.83 17.83 0 0 0-13.44 6.67c-4.86 5.86-5 14-.29 21.81 5.82 9.71 18.2 17.94 33.94 22.59a106.52 106.52 0 0 0 20.23 3.8c-5.71 24.22-9 43.33-9 43.57a6.84 6.84 0 1 0 13.49 2.29c0-.24 3.18-18.6 8.68-42 24.43 21.07 51.27 43.12 74.38 43.12a33.47 33.47 0 0 0 6.56-.63c10.64-2.12 19.15-9.41 25.29-21.67a6.84 6.84 0 0 0-3.08-9.19zm-158.63-49c-.73-1.21-2.28-4.22-.92-5.85a4 4 0 0 1 3.25-1.66h.21c2.88 0 9.58 1.83 23.05 13.4 4.66 4 9.52 8.63 14.36 13.47C33.47 91.6 19.86 82.65 15.3 75.06zm61 15.49c15.15-56 27.91-71.21 34.17-75.31a12.14 12.14 0 0 1 5.77-1.38c8.66 2.14 17.27 11 22.48 23.07 5.68 13.18 5.9 27.22.58 36.62-4.9 8.66-24.43 16-49.77 18.6-4.62.48-9.3.79-13.91.94z"></path></svg>
+				 </div>
+				 <h3 class="h3 headline-strike mb-4"><span>Reiseschein bekannt aus</span></h3>
+				<div class="px-2 px-md-4 fam-from d-flex justify-content-between flex-wrap align-items-center flex-column flex-md-row">
+					<div class="icen-div pb-3 pb-md-0 mr-0 mr-md-3">
+						<div class="icn-fs-tb"></div>
+					</div>
+					<div class="icen-div pb-3 pb-md-0 mr-0 mr-md-3">
+						<div class="icn-ft-tb"></div>
+					</div>
+					<div class="icen-div pb-3 pb-md-0 mr-0 mr-md-3">
+						<div class="icn-bk-tb"></div>
+					</div>
+					<div class="icen-div pb-3 pb-md-0 mr-0 mr-md-3">
+						<div class="icn-kr-tb"></div>
+					</div>
+					<div class="icen-div pb-3 pb-md-0 mr-0 mr-md-3">
+						<div class="icn-gz-tb"></div>
+					</div>
+					<div class="icen-div pb-3 pb-md-0 mr-0 mr-md-3">
+						<div class="icn-ds-tb"></div>
+					</div>
+					<div class="iceo-div pb-3 pb-md-0 mr-0">
+						<div class="icn-ed-tb"></div>
+					</div>
+				</div>
+
+			</div>
+	   </div>
+   </div>
+</div>
+<div class="container-fluid home-bg-grey">
+	<div class="container-max py-5">
+
+		{% set BigCat1Link = config("reiseschein.homepage.BigCat1Link") %}
+		{% set BigCat1Img = config("reiseschein.homepage.BigCat1Img") %}
+		{% set BigCat1Text = config("reiseschein.homepage.BigCat1Text") %}
+
+		{% set BigCat2Link = config("reiseschein.homepage.BigCat2Link") %}
+		{% set BigCat2Img = config("reiseschein.homepage.BigCat2Img") %}
+		{% set BigCat2Text = config("reiseschein.homepage.BigCat2Text") %}
+
+		{% set BigCat3Link = config("reiseschein.homepage.BigCat3Link") %}
+		{% set BigCat3Img = config("reiseschein.homepage.BigCat3Img") %}
+		{% set BigCat3Text = config("reiseschein.homepage.BigCat3Text") %}
+
+		{% set BigCat4Link = config("reiseschein.homepage.BigCat4Link") %}
+		{% set BigCat4Img = config("reiseschein.homepage.BigCat4Img") %}
+		{% set BigCat4Text = config("reiseschein.homepage.BigCat4Text") %}
+
+		{% set BigCat5Link = config("reiseschein.homepage.BigCat5Link") %}
+		{% set BigCat5Img = config("reiseschein.homepage.BigCat5Img") %}
+		{% set BigCat5Text = config("reiseschein.homepage.BigCat5Text") %}
+		<div class="row">
+             <div class="col-12 pt-4">
+				<div class="img-letter">
+					<svg xmlns="http://www.w3.org/2000/svg" width="45" height="41" viewBox="0 0 177.71 160.14"><path id="Ebene_1-2" d="M173.93 124.06a6.84 6.84 0 0 0-9.18 3.05c-4.21 8.4-9.35 13.11-15.73 14.38-16.87 3.36-42.08-16.18-64.37-35.18q3.12-.23 6.26-.56c18.2-1.9 50.23-7.72 60.27-25.47 7.49-13.25 7.52-31.48.07-48.77-7-16.18-18.84-27.74-31.76-30.94C114-.8 108.24.31 102.94 3.79 89.08 12.87 76.32 39 64 83.62 45.66 65.44 30.71 53.7 17.86 53.7h-.69a17.83 17.83 0 0 0-13.44 6.67c-4.86 5.86-5 14-.29 21.81 5.82 9.71 18.2 17.94 33.94 22.59a106.52 106.52 0 0 0 20.23 3.8c-5.71 24.22-9 43.33-9 43.57a6.84 6.84 0 1 0 13.49 2.29c0-.24 3.18-18.6 8.68-42 24.43 21.07 51.27 43.12 74.38 43.12a33.47 33.47 0 0 0 6.56-.63c10.64-2.12 19.15-9.41 25.29-21.67a6.84 6.84 0 0 0-3.08-9.19zm-158.63-49c-.73-1.21-2.28-4.22-.92-5.85a4 4 0 0 1 3.25-1.66h.21c2.88 0 9.58 1.83 23.05 13.4 4.66 4 9.52 8.63 14.36 13.47C33.47 91.6 19.86 82.65 15.3 75.06zm61 15.49c15.15-56 27.91-71.21 34.17-75.31a12.14 12.14 0 0 1 5.77-1.38c8.66 2.14 17.27 11 22.48 23.07 5.68 13.18 5.9 27.22.58 36.62-4.9 8.66-24.43 16-49.77 18.6-4.62.48-9.3.79-13.91.94z"></path></svg>
+				</div>
+				<h3 class="h3 headline-strike mb-4"><span>Beliebte Kategorien</span></h3>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-12">
+				<div class="d-flex justify-content-between wellknown py-3 big3cats list-item-carousel owl-carousel owl-theme">
+					<div class="wrapper mb-3">
+						<a href="{{ BigCat1Link }}">
+							<img alt="{{ BigCat1Text }}" src="{{ BigCat1Img }}" class="img-fluid">
+							<span>{{ BigCat1Text }}</span>
+						</a>
+					</div>
+					<div class="wrapper mb-3">
+						<a href="{{ BigCat2Link }}">
+							<img alt="{{ BigCat2Text }}" src="{{ BigCat2Img }}" class="img-fluid">
+							<span>{{ BigCat2Text }}</span>
+						</a>
+					</div>
+					<div class="wrapper mb-3">
+						<a href="{{ BigCat3Link }}">
+							<img alt="{{ BigCat3Text }}" src="{{ BigCat3Img }}" class="img-fluid">
+							<span>{{ BigCat3Text }}</span>
+						</a>
+					</div>
+					{% if BigCat4Img != "" %}
+					<div class="wrapper mb-3">
+						<a href="{{ BigCat4Link }}">
+							<img alt="{{ BigCat4Text }}" src="{{ BigCat4Img }}" class="img-fluid">
+							<span>{{ BigCat4Text }}</span>
+						</a>
+					</div>
+					{% endif %}
+					{% if BigCat5Img != "" %}
+					<div class="wrapper mb-3">
+						<a href="{{ BigCat5Link }}">
+							<img alt="{{ BigCat5Text }}" src="{{ BigCat5Img }}" class="img-fluid">
+							<span>{{ BigCat5Text }}</span>
+						</a>
+					</div>
+					{% endif %}
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+</div><!-- end bekannt aus -->
+<div class="container-fluid home-bg-light d-none d-md-block">
+	<div class="container-max py-3 home-seo px-3 px-md-4">
+		<div class="row">
+             <div class="col-12 py-4">
+	            {% autoescape false %}
+	                {{ seotext.details[0].description }}
+	            {% endautoescape %}
+			</div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid home-bg-grey">
+	<div class="container-max py-3 px-3 px-md-4 pb-md-5">
+		<div class="row">
+             <div class="col-12 py-4">
+			 	{{ LayoutContainer.show("Ceres::Footer.RowOne") }}
+			</div>
+		</div>
+	</div>
+</div>

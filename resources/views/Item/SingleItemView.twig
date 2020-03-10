@@ -1,0 +1,38 @@
+{{ component( "Ceres::Basket.Components.AddToBasket" ) }}
+{{ component( "reiseschein::Item.Components.AddToWishList" ) }}
+{{ component( "Ceres::Item.Components.GraduatedPrices" ) }}
+{{ component( "Ceres::Item.Components.ItemBundle" ) }}
+{{ component( "reiseschein::Item.Components.ItemImageCarousel" ) }}
+{{ component( "Ceres::Item.Components.OldVariationSelect" ) }}
+{{ component( "Ceres::Item.Components.OrderProperties" ) }}
+{{ component( "Ceres::Item.Components.OrderPropertyList" ) }}
+{{ component( "reiseschein::Item.Components.SingleItem" ) }}
+{{ component( "Ceres::Item.Components.VariationSelect" ) }}
+
+<single-item v-cloak item-data="{{ item | json_data }}" attributes-data="{{ attributes | json_data }}" variations="{{ variations | json_data }}">
+    <template #before-price>{{ LayoutContainer.show("Ceres::SingleItem.BeforePrice", item.documents[0].data) }}</template>
+    <template #after-price>{{ LayoutContainer.show("Ceres::SingleItem.AfterPrice", item.documents[0].data) }}</template>
+    <template #before-add-to-basket>{{ LayoutContainer.show("Ceres::SingleItem.BeforeAddToBasket", item.documents[0].data) }}</template>
+    <template #after-add-to-basket>{{ LayoutContainer.show("Ceres::SingleItem.AfterAddToBasket", item.documents[0].data) }}</template>
+    <template #additional-content-after-add-to-basket>{{ LayoutContainer.show("Ceres::SingleItem.AdditionalContentAfterAddToBasket", item.documents[0].data) }}</template>
+    <template #additional-content-after-vat>{{ LayoutContainer.show("Ceres::SingleItem.AdditionalContentAfterVAT", item.documents[0].data) }}</template>
+    <template #add-detail-tabs>{{ LayoutContainer.show("Ceres::SingleItem.AddDetailTabs", item.documents[0].data) }}</template>
+    <template #add-detail-tabs-content>{{ LayoutContainer.show("Ceres::SingleItem.AddDetailTabsContent", item.documents[0].data) }}</template>
+    <template #item-list-container>{{ LayoutContainer.show("Ceres::SingleItem.ItemListContainer", item) }}</template>
+    <template #feedback-container>{{ LayoutContainer.show("Ceres::SingleItem.FeedbackContainer", item) }}</template>
+    <template #image-carousel>
+        {% set ImageCarouselOverride = LayoutContainer.show("Ceres::SingleItem.ImageCarousel") %}
+        {% if ImageCarouselOverride|trim is empty %}
+            <item-image-carousel image-url-accessor="url" template="#vue-item-image-carousel"></item-image-carousel>
+        {% else %}
+            {{ ImageCarouselOverride }}
+        {% endif %}
+    </template>
+    <template #bread>
+        {% if not services.template.isHome() and not services.template.isMyAccount() and not services.template.isCheckout() and not services.template.isCategory() %}
+            <div class="single-breadcrumbs">
+                {% include "Ceres::PageDesign.Partials.Header.Breadcrumb" %}
+            </div>
+        {% endif %}
+    </template>
+</single-item>

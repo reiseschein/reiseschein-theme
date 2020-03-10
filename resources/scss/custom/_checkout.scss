@@ -1,0 +1,110 @@
+.checkout {
+    .custom-gtc-accept,
+    .custom-gtc-accept-label sup { display: none; }
+    .custom-gtc-accept-label { margin-top: 1rem; }
+    .shipping-method-select {
+        ul.method-list {
+            justify-content: flex-start;
+            display: flex;
+            flex-flow: wrap;
+            .method-list-item {
+                width: 49%;
+                margin-right: 1%;
+                @include media-breakpoint-up(sm) { width: 32%; }
+                @include media-breakpoint-up(md) { width: 49%; }
+                @include media-breakpoint-up(lg) { width: 32%; }
+                @include media-breakpoint-up(xl) { width: 24%; }
+                .provider-select-label {
+                    flex-direction: column;
+                    height: 11rem; // ??
+                    justify-content: center;
+                    &>a { width: 100%;}
+                    .icon {
+                        width: 100%;
+                        height:4rem;
+                        background-size: contain !important;
+                        &:hover { cursor: zoom-in; }
+                    }
+                    .content {
+                        width: unset;
+                        font-size: .9rem;
+                        text-align: center;
+                        padding-left: 0;
+                    }
+                }
+                &[data-id="6"] { .icon { background: url(https://www.reiseschein.de/images/gallery/GBbilder/gb-6.jpg) no-repeat center top; } }
+                &[data-id="7"] { .icon { background: url(https://www.reiseschein.de/images/gallery/GBbilder/gb-7.jpg) no-repeat center top; } }
+                &[data-id="19"] { .icon { background: url(https://www.reiseschein.de/images/gallery/GBbilder/gb-19.jpg) no-repeat center top; } }
+                &[data-id="17"] { .icon { background: url(https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/Geschenkbox-Bilder/gb-17.png) no-repeat center top; } }
+                &[data-id="26"] { .icon { background: url(https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/Geschenkbox-Bilder/gb-23.png) no-repeat center top; } }
+                &[data-id="27"] { .icon { background: url(https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/Geschenkbox-Bilder/gb-30.png) no-repeat center top; } }
+                &[data-id="28"] { .icon { background: url(https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/Geschenkbox-Bilder/gb-31.png) no-repeat center top; } }
+                &[data-id="29"] { .icon { background: url(https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/Geschenkbox-Bilder/gb-32.png) no-repeat center top; } }
+                &[data-id="30"] { .icon { background: url(https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/Geschenkbox-Bilder/gb-33.png) no-repeat center top; } }
+                &[data-id="21"] { .icon { background: url(https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/Geschenkbox-Bilder/gb-21.png) no-repeat center top; } }
+                &[data-id="22"] { .icon { background: url(https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/Geschenkbox-Bilder/gb-29.png) no-repeat center top; } }
+                &[data-id="23"] { .icon { background: url(https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/Geschenkbox-Bilder/gb-22.png) no-repeat center top; } }
+                &[data-id="24"] { .icon { background: url(https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/Geschenkbox-Bilder/gb-25.png) no-repeat center top; } }
+                &[data-id="25"] { .icon { background: url(https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/Geschenkbox-Bilder/gb-24.png) no-repeat center top; } }
+                &[data-id="20"] { .icon { background: url(https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/Geschenkbox-Bilder/gb-20.png) no-repeat center top; } }
+            }
+        }
+    }
+    .cmp-basket-preview-list {
+        .basket-item {
+            @include media-breakpoint-up(lg) {
+                .image-container {
+                    width: 200px;
+                    margin-right: 20px;
+                }
+            }
+            a.item-name {
+                color: $secondary !important;
+            }
+        }
+    }
+}
+.basket-preview-content {
+    .item-name {
+        color: $secondary !important;
+    }
+    .basket-preview-footer {
+        .basketBtn {
+            color: $black !important;
+            border-color: $black !important;
+            &:hover {
+                background-color: $black !important;
+                color: $white !important;
+            }
+        }
+    }
+}
+
+.page-basket {
+    .basket-item {
+        @include media-breakpoint-up(lg) {
+            .image-container {
+                width: 200px;
+                margin-right: 20px;
+            }
+        }
+        a.item-name {
+            color: $secondary !important;
+        }
+    }
+}
+
+.page-login {
+    .container-max.login {
+        margin-top: 4rem;
+        margin-bottom: 7rem;
+        .login-container {
+            &>.row {
+                align-items: center;
+                .col-5.col-sm-8.text-sm-right {
+                    &>a.text-primary { display: none; }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,118 @@
+{{ component( "Ceres::Basket.Components.AddToBasket" ) }}
+{{ component( "Ceres::ItemList.Components.CategoryImageCarousel") }}
+{{ component( "Ceres::ItemList.Components.ItemStoreSpecial" ) }}
+{{ component( "reiseschein::Item.Components.AddToWishList" ) }}
+
+{% import "Ceres::Basket.Macros.AddToBasket" as AddToBasket %}
+
+{% if enableCarousel is not defined %}
+    {% if config("Ceres.item.enable_image_carousel") == "true" %}
+        {% set enableCarousel = "true" %}
+    {% else %}
+        {% set enableCarousel = "false" %}
+    {% endif %}
+{% endif %}
+
+<script type="x/template" id="vue-category-item">
+    <article class="cmp cmp-product-thumb cmp-product-thumb--grid">
+
+        <div class="thumb-inner" :class="paddingClasses" :style="paddingInlineStyles">
+
+            {{ AddToBasket.printVueComponent( "item", true, false, { ":has-price": "item | hasItemDefaultPrice" } ) }}
+
+            <div class="thumb-background"></div>
+
+            <div class="thumb-image mb-3">
+                <slot name="item-image">
+                    <category-image-carousel template="#vue-category-image-carousel"
+                                            :image-urls-data="item.images | itemImages(imageUrlAccessor)"
+                                            :alt-text="item | itemName"
+                                            :title-text="item | itemName"
+                                            :item-url="item | itemURL"
+                                            :enable-carousel="{{ enableCarousel }}"
+                                            :disable-carousel-on-mobile="true"
+                                            :disable-lazy-load="true"
+                                            ref="categoryImageCarousel">
+                    </category-image-carousel>
+                </slot>
+                {% if services.template.isHome() %}
+                    <add-to-wish-list :variation-id="itemData.variation.id"></add-to-wish-list>
+                {% elseif services.template.isCategory() %}
+                    <add-to-wish-list :variation-id="item.variation.id"></add-to-wish-list>
+                {% endif %}
+                <!-- STORE SPECIALS -->
+                <div v-if="item.prices.rrp && item.prices.rrp.price.value > 0 && item.prices.rrp.price.value > item.prices.default.unitPrice.value" class="special-tags">
+                    <span class="badge badge-success" data-toggle="tooltip" title="Ihre Ersparnis">
+                        -<span>${ (item.prices.rrp.unitPrice.value - item.prices.default.price.value) / item.prices.rrp.unitPrice.value * 100 }</span>% <sup>2</sup>
+                    </span>
+                </div>
+                <!-- ./STORE SPECIALS -->
+                <div id="thumb-rec" class="special-tags">
+                    <span class="badge badge-success" data-toggle="tooltip" title="Weiterempfehlung"></span>
+                </div>
+            </div>
+
+
+
+            <!-- ITEM DETAILS -->
+            <slot name="item-details">
+                <div class="thumb-content">
+                    <a :href="item | itemURL" class="thumb-title font-weight-bold">
+                        ${ item | itemName }<!--
+                        --><span v-for="attribute in item.groupedAttributes">${ "Ceres::Template.itemGroupedAttribute" | translate(attribute) }</span>
+                    </a>
+                    <hr class="my-3" />
+                    <div class="icons d-flex flex-nowrap justify-content-center">
+
+                        <img data-toggle="tooltip" data-placement="top" alt="WLAN Icon" title="WLAN" src="https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/FS_assets/wlan.svg" class="icons-wlan d-none img-fluid">
+                        <img data-toggle="tooltip" data-placement="top" alt="Restaurant Icon" title="Restaurant" src="https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/FS_assets/restaurant.svg" class="icons-restaurant d-none img-fluid">
+                        <img data-toggle="tooltip" data-placement="top" alt="Bar Icon" title="Bar" src="https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/FS_assets/bar2.svg" class="icons-bar d-none img-fluid">
+                        <img data-toggle="tooltip" data-placement="top" alt="Spa und Wellness Icon" title="Spa und Wellness" src="https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/FS_assets/spa.svg" class="icons-spa d-none img-fluid">
+                        <img data-toggle="tooltip" data-placement="top" alt="Pool Icon" title="Pool" src="https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/FS_assets/pool.svg" class="icons-pool d-none img-fluid">
+                        <img data-toggle="tooltip" data-placement="top" alt="Fitness Icon" title="Fitness" src="https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/FS_assets/fitness.svg" class="icons-fitness d-none img-fluid">
+                        <img data-toggle="tooltip" data-placement="top" alt="Parkplatz Icon" title="Parkplatz" src="https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/FS_assets/parkplatz.svg" class="icons-parkplatz d-none img-fluid">
+                        <img data-toggle="tooltip" data-placement="top" alt="24 Stunden Icon" title="24 Stunden" src="https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/FS_assets/24h.svg" class="icons-24h d-none img-fluid">
+                        <img data-toggle="tooltip" data-placement="top" alt="Fahrstuhl Icon" title="Fahrstuhl" src="https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/FS_assets/fahrstuhl.svg" class="icons-fahrstuhl d-none img-fluid">
+                        <img data-toggle="tooltip" data-placement="top" alt="Haustiere Icon" title="Haustiere" src="https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/FS_assets/haustiere.svg" class="icons-haustiere d-none img-fluid">
+
+                    </div>
+                    <hr class="my-3" />
+                    <div class="thumb-meta">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="list-info-box-left small d-flex flex-wrap">
+                                <span class="d-flex align-items-center"><i class="fa fa-calendar mr-2" aria-hidden="true"></i> <span class="valid"></span>&nbsp;Monate Gültigkeit</span>
+                                <span class="d-flex align-items-center person-wrapper"><i class="fa fa-users mr-2" aria-hidden="true"></i> inkl.&nbsp;<span class="persons"></span>&nbsp;Personen</span>
+                                <span class="d-flex align-items-center night-wrapper"><i class="fa fa-bed mr-2" aria-hidden="true"></i> inkl.&nbsp;<span class="nights"></span>&nbsp;<span class="nightsLabel">Nächte</span>&nbsp;+&nbsp;<span class="food"></span></span>
+                                <span class="d-flex align-items-center"><i class="fa fa-building mr-2" aria-hidden="true"></i> ${ item.item.manufacturer.externalName }</span>
+                            </div>
+                            <div class="list-info-box-right d-flex flex-column text-right">
+                                <div v-if="item.prices.rrp && item.prices.rrp.price.value > 0 && item.prices.rrp.price.value > item.prices.default.unitPrice.value" class="list-wert">
+                                    <span v-if="item.prices.specialOffer">
+                                        Wert: ${ item.prices.default.unitPrice.formatted }<sup>1</sup>
+                                    </span>
+                                    <span v-else>
+                                        Wert: ${ item.prices.rrp.unitPrice.formatted }<sup>1</sup>
+                                    </span>
+                                </div>
+                                <span class="h1 font-weight-bold">
+                                        ${ item.prices.default.price.formatted }
+                                </span>
+                                <span class="vat small text-muted">
+                                    <span v-if="showNetPrices">{{ trans("Ceres::Template.itemExclVAT") }}</span>
+                                    <span v-else>{{ trans("Ceres::Template.itemInclVAT") }}</span>
+                                    {{ trans("Ceres::Template.itemExclusive") }}
+                                    <a href="/pages/versand-und-kosten/" target="_blank" title="{{ trans("Ceres::Template.itemShippingCosts") }}">{{ trans("Ceres::Template.itemShippingCosts") }}</a> / ${ item.item.id }
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <slot name="after-prices"></slot>
+
+
+                </div>
+            </slot>
+            <!-- ./ITEM DETAILS  -->
+        </div>
+    </article>
+</script>

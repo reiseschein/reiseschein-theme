@@ -1,0 +1,463 @@
+{
+    "formatVersion": 1,
+    "menu": {
+
+            "Config.HomepageTab": {
+                "label": "Config.HomepageTab",
+                "formFields": {
+                  "homepage.globalBackgroundImage": {
+                    "type": "inputText",
+                    "required": false,
+                    "label": "Config.globalBackgroundImage",
+                    "options": {
+                        "defaultValue": "https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/FS_assets/home_imgwrapper.jpg"
+                    }
+                },
+                  "homepage.seotext": {
+                    "type": "categoryPicker",
+                    "required": false,
+                    "label": "Config.seotext"
+                  },
+                  "homepage.topitems": {
+                    "type": "inputText",
+                    "required": false,
+                    "label": "Config.topitems",
+                    "options": {
+                        "defaultValue": "TOP REISESCHEINE <div class='d-block d-sm-inline'>DES MONATS</div>"
+                    }
+                },
+                    "homepage.itemIds": {
+                        "type": "inputTextArea",
+                        "required": false,
+                        "label": "Config.homepageVariationIdsTopOffers",
+                        "options": {
+                            "defaultValue": "3570,6116,6224,6226"
+                        }
+                     },
+                     "homepage.multidealsIds": {
+                        "type": "inputTextArea",
+                        "required": false,
+                        "label": "Config.homepageVariationIDsMultiDeals",
+                        "options": {
+                             "defaultValue": "6110,6108,6112,6109"
+                        }
+                     },
+                        "homepage.bestsellerIds": {
+                          "type": "inputTextArea",
+                          "required": false,
+                          "label": "Config.homepageVariationIDsBestseller",
+                          "options": {
+                                "defaultValue": "9516,9517,10090,9602"
+                          }
+                   },
+                        "homepage.BigCat1Link": {
+                             "type": "inputText",
+                             "required": false,
+                             "label": "Config.homepageBigCat1LinkLabel",
+                             "options": {
+                                "defaultValue": "#"
+                             }
+                        },
+                        "homepage.BigCat1Img": {
+                             "type": "inputText",
+                             "required": false,
+                             "label": "Config.homepageBigCat1ImgLabel",
+                             "options": {
+                                "defaultValue": "https://place-hold.it/600x600"
+                             }
+                        },
+                        "homepage.BigCat1Text": {
+                             "type": "inputText",
+                             "required": false,
+                             "label": "Config.homepageBigCat1TextLabel",
+                             "options": {
+                                "defaultValue": "Städtereisen Europa"
+                             }
+                        },
+                        "homepage.BigCat2Link": {
+                             "type": "inputText",
+                             "required": false,
+                             "label": "Config.homepageBigCat2LinkLabel",
+                             "options": {
+                                "defaultValue": "#"
+                             }
+                        },
+                        "homepage.BigCat2Img": {
+                             "type": "inputText",
+                             "required": false,
+                             "label": "Config.homepageBigCat2ImgLabel",
+                             "options": {
+                                "defaultValue": "https://place-hold.it/600x600"
+                             }
+                        },
+                        "homepage.BigCat2Text": {
+                             "type": "inputText",
+                             "required": false,
+                             "label": "Config.homepageBigCat2TextLabel",
+                             "options": {
+                                "defaultValue": "Städtereisen Deutschland"
+                             }
+                        },
+                        "homepage.BigCat3Link": {
+                             "type": "inputText",
+                             "required": false,
+                             "label": "Config.homepageBigCat3LinkLabel",
+                             "options": {
+                                "defaultValue": "#"
+                             }
+                        },
+                        "homepage.BigCat3Img": {
+                             "type": "inputText",
+                             "required": false,
+                             "label": "Config.homepageBigCat3ImgLabel",
+                             "options": {
+                                "defaultValue": "https://place-hold.it/600x600"
+                             }
+                        },
+                        "homepage.BigCat3Text": {
+                             "type": "inputText",
+                             "required": false,
+                             "label": "Config.homepageBigCat3TextLabel",
+                             "options": {
+                                "defaultValue": "Noch viele Städtereisen mehr"
+                             }
+                      },
+                      "homepage.BigCat4Link": {
+                           "type": "inputText",
+                           "required": false,
+                           "label": "Config.homepageBigCat4LinkLabel",
+                           "options": {
+                              "defaultValue": "#"
+                           }
+                      },
+                      "homepage.BigCat4Img": {
+                           "type": "inputText",
+                           "required": false,
+                           "label": "Config.homepageBigCat4ImgLabel",
+                           "options": {
+                              "defaultValue": "https://place-hold.it/600x600"
+                           }
+                      },
+                      "homepage.BigCat4Text": {
+                           "type": "inputText",
+                           "required": false,
+                           "label": "Config.homepageBigCat4TextLabel",
+                           "options": {
+                              "defaultValue": "Noch viele Städtereisen mehr"
+                           }
+                    },
+                    "homepage.BigCat5Link": {
+                         "type": "inputText",
+                         "required": false,
+                         "label": "Config.homepageBigCat5LinkLabel",
+                         "options": {
+                            "defaultValue": "#"
+                         }
+                    },
+                    "homepage.BigCat5Img": {
+                         "type": "inputText",
+                         "required": false,
+                         "label": "Config.homepageBigCat5ImgLabel",
+                         "options": {
+                            "defaultValue": "https://place-hold.it/600x600"
+                         }
+                    },
+                    "homepage.BigCat5Text": {
+                         "type": "inputText",
+                         "required": false,
+                         "label": "Config.homepageBigCat5TextLabel",
+                         "options": {
+                            "defaultValue": "Noch viele Städtereisen mehr"
+                         }
+                  },
+                      "homepage.konfiCategoryId": {
+                          "type": "inputText",
+                          "required": false,
+                          "label": "Config.homepageKonfiCategoryId",
+                          "options": {
+                              "defaultValue": ""
+                          }
+                      }
+                }
+         },
+          "Config.HomepageFeaturesTab": {
+              "label": "Config.HomepageFeaturesTab",
+              "formFields": {
+                  "homepage.HighlightLink1": {
+                      "type": "inputText",
+                      "required": false,
+                      "label": "Config.homepageHighlightLink1Label",
+                      "options": {
+                          "defaultValue": "#"
+                      }
+                  },
+                  "homepage.HighlightImage1": {
+                      "type": "inputText",
+                      "required": false,
+                      "label": "Config.homepageHighlightImage1Label",
+                      "options": {
+                          "defaultValue": "https://place-hold.it/400x300"
+                      }
+                  },
+                  "homepage.HighlightText1": {
+                      "type": "inputText",
+                      "required": false,
+                      "label": "Config.homepageHighlightText1Label",
+                      "options": {
+                          "defaultValue": "Für Paare"
+                      }
+                  },
+                  "homepage.HighlightLink2": {
+                      "type": "inputText",
+                      "required": false,
+                      "label": "Config.homepageHighlightLink2Label",
+                      "options": {
+                          "defaultValue": "#"
+                      }
+                  },
+                  "homepage.HighlightImage2": {
+                      "type": "inputText",
+                      "required": false,
+                      "label": "Config.homepageHighlightImage2Label",
+                      "options": {
+                          "defaultValue": "https://place-hold.it/400x300"
+                      }
+                  },
+                  "homepage.HighlightText2": {
+                      "type": "inputText",
+                      "required": false,
+                      "label": "Config.homepageHighlightText2Label",
+                      "options": {
+                          "defaultValue": "Für Männer"
+                      }
+                  },
+                  "homepage.HighlightLink3": {
+                      "type": "inputText",
+                      "required": false,
+                      "label": "Config.homepageHighlightLink3Label",
+                      "options": {
+                          "defaultValue": "#"
+                      }
+                  },
+                  "homepage.HighlightImage3": {
+                      "type": "inputText",
+                      "required": false,
+                      "label": "Config.homepageHighlightImage3Label",
+                      "options": {
+                          "defaultValue": "https://place-hold.it/400x300"
+                      }
+                  },
+                  "homepage.HighlightText3": {
+                      "type": "inputText",
+                      "required": false,
+                      "label": "Config.homepageHighlightText3Label",
+                      "options": {
+                          "defaultValue": "Für Frauen"
+                      }
+                  },
+                  "homepage.HighlightLink4": {
+                      "type": "inputText",
+                      "required": false,
+                      "label": "Config.homepageHighlightLink4Label",
+                      "options": {
+                          "defaultValue": "#"
+                      }
+                  },
+                  "homepage.HighlightImage4": {
+                      "type": "inputText",
+                      "required": false,
+                      "label": "Config.homepageHighlightImage4Label",
+                      "options": {
+                          "defaultValue": "https://place-hold.it/400x300"
+                      }
+                  },
+                  "homepage.HighlightText4": {
+                      "type": "inputText",
+                      "required": false,
+                      "label": "Config.homepageHighlightText4Label",
+                      "options": {
+                          "defaultValue": "Frühstück & Brunch"
+                      }
+                  },
+                  "homepage.HighlightLink5": {
+                      "type": "inputText",
+                      "required": false,
+                      "label": "Config.homepageHighlightLink5Label",
+                      "options": {
+                          "defaultValue": "#"
+                      }
+                  },
+                  "homepage.HighlightImage5": {
+                      "type": "inputText",
+                      "required": false,
+                      "label": "Config.homepageHighlightImage5Label",
+                      "options": {
+                          "defaultValue": "https://place-hold.it/400x300"
+                      }
+                  },
+                  "homepage.HighlightText5": {
+                      "type": "inputText",
+                      "required": false,
+                      "label": "Config.homepageHighlightText5Label",
+                      "options": {
+                          "defaultValue": "Lorem Ipsum 5"
+                      }
+                  },
+                  "homepage.HighlightLink6": {
+                      "type": "inputText",
+                      "required": false,
+                      "label": "Config.homepageHighlightLink6Label",
+                      "options": {
+                          "defaultValue": "#"
+                      }
+                  },
+                  "homepage.HighlightImage6": {
+                      "type": "inputText",
+                      "required": false,
+                      "label": "Config.homepageHighlightImage6Label",
+                      "options": {
+                          "defaultValue": "https://place-hold.it/400x300"
+                      }
+                  },
+                  "homepage.HighlightText6": {
+                      "type": "inputText",
+                      "required": false,
+                      "label": "Config.homepageHighlightText6Label",
+                      "options": {
+                          "defaultValue": "Lorem Ipsum 6"
+                      }
+                  },
+                  "homepage.HighlightLink7": {
+                      "type": "inputText",
+                      "required": false,
+                      "label": "Config.homepageHighlightLink7Label",
+                      "options": {
+                          "defaultValue": ""
+                      }
+                  },
+                  "homepage.HighlightImage7": {
+                      "type": "inputText",
+                      "required": false,
+                      "label": "Config.homepageHighlightImage7Label",
+                      "options": {
+                          "defaultValue": "https://place-hold.it/400x300"
+                      }
+                  },
+                  "homepage.HighlightText7": {
+                      "type": "inputText",
+                      "required": false,
+                      "label": "Config.homepageHighlightText7Label",
+                      "options": {
+                          "defaultValue": "Lorem Ipsum 7"
+                      }
+                  },
+                  "homepage.HighlightLink8": {
+                      "type": "inputText",
+                      "required": false,
+                      "label": "Config.homepageHighlightLink8Label",
+                      "options": {
+                          "defaultValue": ""
+                      }
+                  },
+                  "homepage.HighlightImage8": {
+                      "type": "inputText",
+                      "required": false,
+                      "label": "Config.homepageHighlightImage8Label",
+                      "options": {
+                          "defaultValue": "https://place-hold.it/400x300"
+                      }
+                  },
+                  "homepage.HighlightText8": {
+                      "type": "inputText",
+                      "required": false,
+                      "label": "Config.homepageHighlightText8Label",
+                      "options": {
+                          "defaultValue": "Lorem Ipsum 8"
+                      }
+                  }
+              }
+       },
+
+        "Config.newsletterTab": {
+            "label": "Config.newsletterTab",
+            "formFields": {
+                "newsletter.nlBgImg": {
+                    "type": "inputText",
+                    "required": false,
+                    "label": "Config.newsletterNlBgImgLabel",
+                    "options": {
+                        "defaultValue": "https://www.reiseschein.de/images/gallery/Basis/panorama-1993645.jpg"
+                    }
+                },
+                "newsletter.nlsubheadline": {
+                    "type": "inputText",
+                    "required": false,
+                    "label": "Config.newsletterNlsubheadlineLabel",
+                    "options": {
+                        "defaultValue": "jetzt anmelden"
+                    }
+                },
+                "newsletter.nlheadline": {
+                    "type": "inputText",
+                    "required": false,
+                    "label": "Config.newsletterNlheadlineLabel",
+                    "options": {
+                        "defaultValue": "10 € guthaben kassieren *"
+                    }
+                },
+                "newsletter.nlusp1": {
+                    "type": "inputText",
+                    "required": false,
+                    "label": "Config.newsletterNlusp1Label",
+                    "options": {
+                        "defaultValue": "Sonderrabatte & Aktionen"
+                    }
+                },
+                "newsletter.nlusp2": {
+                    "type": "inputText",
+                    "required": false,
+                    "label": "Config.newsletterNlusp2Label",
+                    "options": {
+                        "defaultValue": "Exklusive Neuheiten"
+                    }
+                },
+                "newsletter.nlusp3": {
+                    "type": "inputText",
+                    "required": false,
+                    "label": "Config.newsletterNlusp3Label",
+                    "options": {
+                        "defaultValue": "10€ Startguthaben"
+                    }
+                },
+                "newsletter.nllegal": {
+                    "type": "inputText",
+                    "required": false,
+                    "label": "Config.newsletterNllegalLabel",
+                    "options": {
+                        "defaultValue": "* Mit dem Klick auf Anmelden stimmen Sie unseren AGB zu und nehmen unsere Datenschutzbestimmungen zur Kenntnis. <br /> Rabatt nicht anwendbar für Wertgutscheine, Shows & Tickets und rabattierte Sonderartikel. Mindestbestellwert 89,- €."
+                    }
+                }
+            }
+        },
+        "Config.menuTab": {
+            "label": "Config.menuTab",
+            "formFields": {
+                "menu.menu": {
+                    "type": "inputText",
+                    "required": false,
+                    "label": "menu.menuLabel"
+                }
+            }
+       },
+       "Config.footerTab": {
+           "label": "Config.footerTab",
+           "formFields": {
+               "footer.footerseotext": {
+                   "type": "categoryPicker",
+                   "required": false,
+                   "label": "Config.footerseotext"
+               }
+           }
+      }
+    }
+}

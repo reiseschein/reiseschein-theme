@@ -1,0 +1,11 @@
+<script type="x/template" id="vue-item-image-carousel">
+    <div itemscope itemtype="http://schema.org/Thing">
+        <div class="single-grid">
+            <div v-for="image in currentVariation.documents[0].data.images.all" class="single-grid-item">
+                <a :href="image.url" class="d-inline-block" data-lightbox="roadtrip">
+                    <img :src="image.urlMiddle" class="img-fluid" :alt="getAltText(image)" :title="getItemName()" itemprop="image">
+                </a>
+            </div>
+        </div>
+    </div>
+</script>

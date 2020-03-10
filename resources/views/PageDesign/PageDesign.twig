@@ -1,0 +1,556 @@
+{% import "Ceres::PageDesign.Macros.IncludeComponents" as Loader %}
+{% import "Ceres::PageDesign.Macros.LayoutContainer" as LayoutContainer %}
+{% import "Ceres::PageDesign.Macros.Translations" as Translations %}
+{{ component( "Ceres::PageDesign.Components.Notifications" ) }}
+{{ component( "Ceres::Basket.Components.BasketPreview" ) }}
+{{ component( "Ceres::Customer.Components.Login" ) }}
+{{ component( "Ceres::Customer.Components.Registration" ) }}
+{{ component( "Ceres::Basket.Components.AddItemToBasketOverlay" ) }}
+{{ component( "Ceres::PageDesign.Components.Popper" ) }}
+{{ component( "Ceres::Customer.Components.ForgotPassword" ) }}
+{{ component("Ceres::Customer.Components.Contact.AcceptPrivacyPolicyCheck") }}
+
+{# TODO: remove if shop builder pages can be rebuild by migrations #}
+{{ component( "Ceres::Containers.Components.LastSeenItemList" ) }}
+{{ component( "Ceres::ItemList.Components.CategoryItem") }}
+{{ component( "Ceres::Newsletter.Components.NewsletterInput" ) }}
+{{ component( "Ceres::PageDesign.Components.Carousel" ) }}
+
+{% if request.get('isContentBuilder') == 1 %}
+    {% include "Ceres::Widgets.WidgetComponents" %}
+{% endif %}
+
+{% set currencyFormat = config("Ceres.currency.format") %}
+{% set defaultLanguage = services.webstoreConfig.getDefaultLanguage() %}
+
+{% if request.get('openBasketPreview') == 1 %}
+    {% set openBasketClass = "open-" ~ ceresConfig.basket.previewType %}
+{% endif %}
+
+<!DOCTYPE html>
+
+<html lang="{{ lang }}" data-framework="vue" prefix="og: http://ogp.me/ns#">
+
+{% if category is defined and category.id == 605 %}
+<head>
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-WK4KXQ');</script>
+</head>
+{% else %}
+<head>
+    {% include getPartial('head') %}
+
+    {% block PartialHead %}
+        {% embed getPartial('page-metadata') %}{% endembed %}
+    {% endblock %}
+
+    {# CUSTOM #}
+    <link rel="dns-prefetch" href="https://www.reiseschein.de/">
+    <link rel="preconnect" href="https://www.reiseschein.de/">
+
+    <script type="application/javascript" async src="https://app.usercentrics.eu/latest/main.js" id="2j20yW23"></script>
+    <!-- PayPal BEGIN -->
+    <script async type="text/plain" data-usercentrics="PayPal Tag Manager">
+    ;(function(a,t,o,m,s){a[m]=a[m]||[];a[m].push({t:new Date().getTime(),event:'snippetRun'});var f=t.getElementsByTagName(o)[0],e=t.createElement(o),d=m!=='paypalDDL'?'&m='+m:'';e.async=!0;e.src='https://www.paypal.com/tagmanager/pptm.js?id='+s+d;f.parentNode.insertBefore(e,f);})(window,document,'script','paypalDDL','7ab673b3-4e9b-41cc-87cc-8abd9dbf1349');
+    </script>
+    <!-- PayPal END -->
+    {# Google Tag Manager #}
+    <script async type="text/plain" data-usercentrics="Google Tag Manager">(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-WK4KXQ');
+    </script>
+
+
+    {% for styleTemplate in get_additional_styles() %}
+        {% include styleTemplate.path ignore missing with styleTemplate.params %}
+    {% endfor %}
+</head>
+{% endif %}
+
+{% if category is defined and category.id == 605 %}
+<body>
+    <!-- Google Tag Manager (noscript) -->
+		<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WK4KXQ"
+		height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+		<!-- End Google Tag Manager (noscript) -->
+</body>
+{% else %}
+<body class="{{ bodyClasses | join(' ') }}">
+
+    {# CUSTOM #}
+    {# Google Tag Manager (noscript) #}
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WK4KXQ" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+
+    <script  type="text/javascript" data-usercentrics="Adcell" src="https://t.adcell.com/js/trad.js"></script>
+	<script >Adcell.Tracking.track();</script>
+
+
+
+{{ LayoutContainer.show("Ceres::PageDesign.AfterOpeningBodyTag") }}
+
+<script>
+    if('ontouchstart' in document.documentElement)
+    {
+        document.body.classList.add("touch");
+    }
+    else
+    {
+        document.body.classList.add("no-touch");
+    }
+</script>
+{# set globalBackgroundImage = config("reiseschein.homepage.globalBackgroundImage") #}
+
+<div id="vue-app"{% if openBasketClass is not empty %} class="{{ openBasketClass }}"{% endif %}>
+
+
+       {# if services.template.getCurrentTemplate()=="tpl.home" #}
+              <!-- <div class="bgimg-wrapper" style="background-image: url( );"></div> -->
+       {# endif #}
+
+    <div class="wrapper wrapper-top">
+        <!-- messages -->
+        <notifications template="#vue-notifications" :initial-notifications="{{ notifications | json_encode() }}"></notifications>
+    </div>
+
+    <div class="wrapper wrapper-left">
+        <!-- filters -->
+    </div>
+
+    <div class="wrapper wrapper-main {% if ceresConfig.header.fixNavBarPos %}isSticky{% endif %}">
+        <div class="loader-wrapper">
+    <div class="loader"></div>
+
+    <div class="loader-section section-left"></div>
+    <div class="loader-section section-right"></div>
+  </div>
+
+        {% include getPartial('header') %}
+
+        <div id="page-body" class="main">
+            {% block PageBody %}
+                <!-- inject content of inherited templates here -->
+            {% endblock %}
+        </div>
+
+        {% include getPartial('footer') %}
+        {# CUSTOM #}
+        <!-- BEGIN - EasyReviews Addon | www.shopvote.de -->
+        <script type="text/javascript" data-usercentrics="Shopvote" src="https://feedback.shopvote.de/srt-v3.min.js"></script>
+        <script type="text/javascript">
+          var myToken = "964c7d21c21807b918cc3173673cc10d";
+          var mySrc = ('https:' === document.location.protocol ? 'https' : 'http');
+          loadSRT(myToken, mySrc);
+        </script>
+        <!-- END - EasyReviews Addon | www.shopvote.de -->
+        {% block PartialFooter %}
+        {% endblock %}
+    </div>
+
+    {% if basket is not defined %}
+        {% set basket = services.basket.getBasketForTemplate() %}
+    {% endif %}
+    {% if ceresConfig.basket.previewType == "right" %}
+        <div class="wrapper wrapper-right">
+            <basket-preview :show-net-prices={{ showNetPrices | json_encode }}></basket-preview>
+        </div>
+    {% endif %}
+
+    <div class="wrapper wrapper-bottom">
+           <!-- LOGIN MODAL -->
+    				<div id="login-modal-wrapper">
+    					<div class="modal fade login-modal" id="login" tabindex="-1" role="dialog">
+    						<div class="modal-dialog">
+    							<div class="modal-content">
+
+
+
+    								<div class="modal-body">
+    									<div class="row">
+    										<div class="col-12">
+    											<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    										</div>
+    									</div>
+    									<div class="row">
+    										<div class="col-12">
+    											<ul class="nav nav-tabs" role="tablist">
+    												<li class="nav-item">
+    													<a class="nav-link active" data-toggle="tab" href="#tab-login" role="tab" aria-expanded="true">Anmelden</a>
+    												</li>
+    												<li class="nav-item">
+    													<a class="nav-link" data-toggle="tab" href="#tab-register" role="tab" aria-expanded="false">Registrieren</a>
+    												</li>
+    											</ul>
+
+    											<div class="tab-content">
+    												<div class="tab-pane active" id="tab-login" role="tabpanel" aria-expanded="true">
+    													<div class="m-y-2">
+    														<login template="#vue-login" modal-element="login-modal-wrapper"></login>
+    													</div>
+    												</div>
+    												<div class="tab-pane" id="tab-register" role="tabpanel" aria-expanded="false">
+
+    		                                           <div class="m-y-2">
+    	                                                  <popper v-cloak="v-cloak" class="ml-auto regpopper">
+    	               										<button slot="handle" class="btn btn-icon btn-secondary btn-sm">
+    	               											<i class="fa fa-info"></i>
+    	               										</button>
+    	               										<div slot="title">
+    	               											{{ trans("Ceres::Template.regContactInformations") }}
+    	               										</div>
+    	               										<ul slot="content" class='pl-3'>
+    	               											<li class='mb-3'>{{ trans('Ceres::Template.regContactInfoText1') }}</li>
+    	               											<li class='mb-3'>{{ trans('Ceres::Template.regContactInfoText2') }}</li>
+    	               											<li class='mb-3'>{{ trans('Ceres::Template.regContactInfoText3') }}</li>
+    	               											<li>{{ trans('Ceres::Template.regContactInfoText4') }}</li>
+    	               										</ul>
+    	               									</popper>
+
+    														<registration template="#vue-registration" :is-simple-registration="true" modal-element="simple-registration-modal-wrapper"></registration>
+    													</div>
+    												</div>
+    											</div>
+    										</div>
+    									</div>
+    								</div>
+
+    							</div>
+    						</div>
+    					</div>
+    				</div>
+    				<!-- ./LOGIN MODAL -->
+
+    				<!-- REGISTRATION MODAL -->
+    				<div id="simple-registration-modal-wrapper">
+    					<div class="modal fade" id="registration" tabindex="-1" role="dialog">
+    						<div class="modal-dialog">
+    							<div class="modal-content">
+    								<div class="modal-header">
+    									<div class="modal-title h3">
+    										{{ trans("Ceres::Template.regCreateAccount") }}
+
+    									</div>
+
+
+    								</div>
+    								<registration template="#vue-registration" :is-simple-registration="true" modal-element="simple-registration-modal-wrapper"></registration>
+    							</div>
+    						</div>
+    					</div>
+    				</div>
+    				<!-- ./REGISTRATION MODAL -->
+
+
+        <!-- BASKET MODAL -->
+        <add-item-to-basket-overlay></add-item-to-basket-overlay>
+        <!-- ./BASKET MODAL -->
+
+        <!-- PASSWORD RESET MODAL -->
+        <forgot-password-modal></forgot-password-modal>
+        <!-- ./PASSWORD RESET MODAL -->
+
+        <!-- SHIPPINGCOSTS MODAL -->
+        {% if ceresConfig.global.shippingCostsCategoryId > 0 %}
+        <div id="shippingscosts-modal-wrapper">
+            <div class="modal fade" id="shippingscosts" tabindex="-1" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <div class="modal-title h3">{{ trans('Ceres::Template.shippingInfoCosts') }}</div>
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            {% set shopBuilderShippingTemplate = shop_builder_category_template(ceresConfig.global.shippingCostsCategoryId) %}
+                            {% if shopBuilderShippingTemplate | trim is not empty %}
+                                {{ shopBuilderShippingTemplate | raw }}
+                            {% else %}
+                                {% include category_template(ceresConfig.global.shippingCostsCategoryId, lang, webstoreConfig.webstoreId) ignore missing %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        <!-- ./SHIPPINGCOSTS MODAL -->
+        {% if services.template.isItem() %}
+        <div class="modal fade" id="erklaervideo" tabindex="-1" role="dialog" aria-labelledby="erklaervideoLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="erklaervideoLabel">Reiseschein Erklärvideo</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <video controls="" height="422" width="100%" src="https://www.reiseschein.de/layout/responsive/tb/video/Reiseschein.mp4" poster="https://www.reiseschein.de/layout/responsive/tb/video/thumbnail.jpg" preload="none"></video>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Schlie&szlig;en</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal fade" id="telOrder" tabindex="-1" role="dialog" aria-labelledby="telOrderLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="telOrderLabel">DIESEN ARTIKEL KÖNNEN SIE AUCH TELEFONISCH BESTELLEN.</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                  <table class="table table-borderless">
+                      <tbody>
+                          <tr>
+                            <td><i class="fa fa-phone text-primary" aria-hidden="true"></i> Telefon:</td>
+                            <td><a href="tel:+498819254933">0881 925 49 33</a><br /><small>Mo. bis Fr. von 9:00 bis 17:30 Uhr</small></td>
+                          </tr>
+                          <tr>
+                            <td><i class="fa fa-envelope-o text-primary" aria-hidden="true"></i> E-Mail:</td>
+                            <td><a href="mailto:service@reiseschein.de">service@reiseschein.de</a></td>
+                          </tr>
+                          <tr>
+                            <td><i class="fa fa-whatsapp text-whatsapp" aria-hidden="true"></i> Whatsapp:</td>
+                            <td><a href="https://api.whatsapp.com/send?phone=4915227856785" rel="nofollow" target="_blank">+49 152/27856785</a></td>
+                          </tr>
+                          <tr>
+                            <td><i class="fa fa-file-text-o text-primary" aria-hidden="true"></i> Formular:</td>
+                            <td><a href="/contact" target="_blank">Kontaktformular</a></td>
+                          </tr>
+                          <tr>
+                            <td colspan="2"><hr class="my-3" /></td>
+                          </tr>
+                          <tr>
+                            <td><i class="fa fa-tag text-primary" aria-hidden="true"></i> Artikel-Nr:</td>
+                            <td><a href="{{ item.documents[0].data.texts.urlPath }}_{{ item.documents[0].data.item.id }}_{{ item.documents[0].id }}">{{ item.documents[0].data.item.id }}</a></td>
+                          </tr>
+                          <tr>
+                            <td colspan="2">{{ item.documents[0].data.texts.name1 }}</td>
+                          </tr>
+                      </tbody>
+                  </table>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Schlie&szlig;en</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+    App = {
+        config: {{ ceresConfig | json_encode | raw }},
+        urls: {{ urls | json_encode | raw }},
+        activeCurrency: "{{ currencyData[currencyFormat] }}",
+        currencyPattern: {{  services.checkout.getCurrencyPattern() | json_encode | raw }},
+        isCategoryView: {% if services.template.isCategory() == "1" %}true{% else %}false{% endif %},
+        isCheckoutView : {% if services.template.isCheckout() == "1" %}true{% else %}false{% endif %},
+        isSearch: {% if services.template.isSearch() == "1" %}true{% else %}false{% endif %},
+        templateEvent: "{{ templateEvent }}",
+        language: "{{ lang }}",
+        defaultLanguage: "{{ defaultLanguage }}",
+        decimalSeparator: "{{ config("IO.format.separator_decimal") }}",
+        urlTrailingSlash: {{ urls.appendTrailingSlash | json_encode }},
+        isShopBuilder: {{ isShopBuilder | default(false) | json_encode }}
+    };
+</script>
+
+
+{{ Loader.include_components() }}
+
+{{ LayoutContainer.show("Ceres::Script.Loader") }}
+
+{{ Translations.add( "Ceres", "Template" ) }}
+{% if ceresConfig.log.performanceLevel  == 'development' %}
+    <script src="{{ plugin_path('Ceres') }}/js/dist/ceres-vendor.js"></script>
+    <script src="{{ plugin_path('Ceres') }}/js/dist/ceres-app.js"></script>
+{% else %}
+    <script src="{{ plugin_path('Ceres') }}/js/dist/ceres.min.js"></script>
+{% endif %}
+
+{% for scriptTemplate in get_additional_scripts() %}
+    {% include scriptTemplate.path ignore missing with scriptTemplate.params %}
+{% endfor %}
+
+{{ LayoutContainer.show("Ceres::Script.AfterScriptsLoaded") }}
+
+{{ get_filtered_tags() }}
+{{ get_json_data() }}
+
+<script>
+    vueEventHub = new Vue();
+
+    {% if ceresConfig.log.checkSyntax %}
+        var rootElement = document.getElementById("vue-app");
+        rootElement.innerHTML = rootElement.innerHTML.replace(/(?:^|\s)(?::|v-bind:)\S+=(?:""|'')/g, '');
+
+        var vueApp = new Vue({
+            store: window.ceresStore
+        });
+
+        vueApp.$mount( rootElement.cloneNode(true) );
+
+        if ( vueApp.$el.id === "vue-app")
+        {
+            document.body.replaceChild( vueApp.$el, rootElement );
+        }
+    {% else %}
+        var vueApp = new Vue({
+            el: "#vue-app",
+            store: window.ceresStore
+        });
+    {% endif %}
+
+    (function($, MediaQueryHelper) {
+        var vueApp = document.getElementById('vue-app');
+        var headerParent = document.getElementById('page-header-parent_');
+        var headerLoaded = false;
+        var allHeaderChildrenHeights = [];
+
+        if ( !!headerParent )
+        {
+            var headerChildren = headerParent.children;
+
+            function calculateBodyOffset()
+            {
+                if (headerLoaded && headerParent)
+                {
+                    var bodyOffset = 0;
+
+                    for( var i = 0; i < headerChildren.length; i++ )
+                    {
+                        bodyOffset += headerChildren[i].getBoundingClientRect().height;
+                    }
+                    vueApp.style.marginTop = bodyOffset + 'px';
+                    vueApp.style.minHeight = "calc(100vh - " + bodyOffset + "px)";
+                }
+            }
+
+            function getHeaderChildrenHeights()
+            {
+                allHeaderChildrenHeights = [];
+
+                for (var i = 0; i < headerChildren.length; i++)
+                {
+                    allHeaderChildrenHeights.push(headerChildren[i].getBoundingClientRect().height);
+                }
+            }
+
+            function scrollHeaderElements()
+            {
+                if (headerLoaded && !App.isShopBuilder)
+                {
+                    var absolutePos = 0;
+                    var fixedElementsHeight = 0;
+                    var offset = 0;
+                    var scrollTop = window.pageYOffset;
+                    var zIndex = 100;
+
+                    for (var i = 0; i < headerChildren.length; i++)
+                    {
+                        var elem = headerChildren[i];
+                        var elemHeight = allHeaderChildrenHeights[i];
+
+                        offset = absolutePos - scrollTop;
+                        elem.style.position = "absolute";
+                        elem.style.zIndex = zIndex;
+                        zIndex--;
+
+                        if (!elem.classList.contains("unfixed"))
+                        {
+                            if (offset < 0)
+                            {
+                                elem.style.top = 0;
+                            }
+                            else
+                            {
+                                elem.style.top = offset + 'px';
+                            }
+
+                            if (fixedElementsHeight > 0 && offset < fixedElementsHeight)
+                            {
+                                elem.style.top = fixedElementsHeight + 'px';
+                            }
+
+                            fixedElementsHeight = fixedElementsHeight + elemHeight;
+                        }
+                        else
+                        {
+                            elem.style.top = offset + 'px';
+                        }
+                        absolutePos = absolutePos + elemHeight;
+                    }
+                }
+            }
+
+            // When window resize to another breakpoint execute functions
+            MediaQueryHelper.addFunction(function(){
+                calculateBodyOffset();
+                getHeaderChildrenHeights();
+                scrollHeaderElements();
+            });
+
+            $(window).scroll(scrollHeaderElements);
+
+            $(document).on('shopbuilder.before.viewUpdate shopbuilder.after.viewUpdate', function()
+            {
+                calculateBodyOffset();
+                $('.owl-carousel').trigger('refresh.owl.carousel');
+            });
+
+            var headerImages = headerParent.querySelectorAll("img");
+
+            Promise.all(
+                Array.prototype.slice.call(headerImages).map(function(headerImage)
+                {
+                    return new Promise(function(resolve)
+                    {
+                        headerImage.onload = function()
+                        {
+                            resolve();
+                        }
+                    });
+                })
+            ).then(function()
+            {
+                // Initialize
+                headerLoaded = true;
+                getHeaderChildrenHeights();
+                scrollHeaderElements();
+                calculateBodyOffset();
+            });
+
+            calculateBodyOffset();
+        }
+
+        $(document).on('shopbuilder.after.drop shopbuilder.after.widget_replace', function(event, eventData, widgetElement)
+        {
+            var compiled = Vue.compile(widgetElement[0].outerHTML, { delimiters: ["${", "}"] } );
+            var component = new Vue({
+                store: window.ceresStore,
+                render: compiled.render,
+                staticRenderFns: compiled.staticRenderFns
+            });
+            component.$mount( widgetElement[0] );
+            $(component.$el).find('*').each(function(index, elem) {
+                $(elem).click(function(event) {
+                    event.preventDefault();
+                });
+            });
+
+            $(component.$el).find('.owl-carousel').on('resized.owl.carousel', function()
+            {
+                window.dispatchEvent(new Event('resize'));
+            });
+        });
+
+
+    })(jQuery, MediaQueryHelper);
+</script>
+
+{{ get_shop_builder_scripts( "latest", ceresConfig.log.performanceLevel == 'live') }}
+</body>
+{% endif %}
+</html>

@@ -1,0 +1,922 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.6.2/bootstrap-slider.min.js" defer integrity="sha256-oj52qvIP5c7N6lZZoh9z3OYacAIOjsROAcZBHUaJMyw=" crossorigin="anonymous" async></script>
+
+{% if services.template.getCurrentTemplate() == 'tpl.checkout' %}
+    <script type="text/javascript" async>
+        $( document ).ready(function() {
+            if (    (window.location.search.indexOf('ReferrerID=25') > -1) ||
+                    (window.location.search.indexOf('ReferrerID=27') > -1) ||
+                    (window.location.search.indexOf('ReferrerID=28') > -1) ||
+                    (window.location.search.indexOf('ReferrerID=29') > -1) ||
+                    (window.location.search.indexOf('ReferrerID=33') > -1) ||
+                    (window.location.search.indexOf('ReferrerID=34') > -1) ||
+                    (window.location.search.indexOf('ReferrerID=35') > -1)
+                ) {
+                $(".checkout-coupon").remove();
+            }
+
+            $(".shipping-method-select .icon").each(function() {
+                var bg = $(this).css('background-image');
+                bg = bg.replace('url(','').replace(')','').replace(/\"/gi, "");
+                        console.log(bg);
+
+                $(this).click(function () {
+                    $(this).wrap('<a href="' + bg + '" rel="lightbox" />');
+                    $(this).parent('a').trigger('click');
+                });
+            });
+
+            if(!$('.custom-gtc-accept').prop('checked')){$('.custom-gtc-accept').click();}
+            $( ".custom-gtc-accept" ).parent( ".form-check" ).css( "padding-left", "0" );
+            $('.custom-gtc-accept').click(false);
+        });
+    </script>
+{% endif %}
+
+<script type="text/javascript" async>
+
+$( document ).ready(function() {
+  $(".invoice-addresses-select .modal button.btn-primary.btn-appearance").before("<div class='row pb-3'><div class='col-12'><small>Neben der Vertragsabwicklung verwenden wir Ihre E-Mail-Adresse auch, um Sie per E-Mail über eigene ähnliche Waren/Dienstleistungen zu informieren. Sie können der Verwendung Ihrer E-Mail-Adresse jederzeit widersprechen, ohne dass hierfür andere als die Übermittlungskosten nach den Basistarifen entstehen. Sollten Sie keine weiteren Angebote wünschen, teilen Sie uns dies bitte per E-Mail an folgende Adresse mit: service@reiseschein.de oder klicken Sie auf den Link Newsletter Abbestellen am Ende des Newsletters.</small></div></div>");
+
+  $(".page-register .registration form.w-100>.modal-body>.row").after("<div class='row pt-3'><div class='col-12'><small>Neben der Vertragsabwicklung verwenden wir Ihre E-Mail-Adresse auch, um Sie per E-Mail über eigene ähnliche Waren/Dienstleistungen zu informieren. Sie können der Verwendung Ihrer E-Mail-Adresse jederzeit widersprechen, ohne dass hierfür andere als die Übermittlungskosten nach den Basistarifen entstehen. Sollten Sie keine weiteren Angebote wünschen, teilen Sie uns dies bitte per E-Mail an folgende Adresse mit: service@reiseschein.de oder klicken Sie auf den Link Newsletter Abbestellen am Ende des Newsletters.</small></div></div>");
+});
+
+(function () {
+
+	nLazy = function(){
+		$('.nl-image[data-background]:visible').each(function(){
+			var $this = $(this)
+			var src = $this.data('background')
+			var imageTop = $this.offset().top
+			var windowSize = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight
+			var windowBottom = $(document).scrollTop() + windowSize
+			if(imageTop <= windowBottom){
+				$this.addClass('nl-loading')
+				$img = $('<img>').attr('src', src).on('load', function(){
+					$(this).remove()
+					$this
+						.css({
+							'opacity': 0,
+							'background-image': 'url(' + src + ')'
+						})
+						.removeClass('nl-loading')
+						.addClass('nl-loaded')
+						.animate({
+							'opacity': 1
+						}, 'fast')
+						.removeAttr('data-background')
+				})
+			}
+		})
+	}
+
+	$(window).scroll(nLazy)
+
+})()
+
+
+
+    setTimeout(function(){
+      $('body').addClass('loaded');
+    }, 1000);
+
+	var didScroll;
+	var lastScrollTop = 0;
+	var delta = 5;
+	var navbarHeight = $('#MagicMenu').outerHeight();
+
+	$(window).scroll(function(event) {
+		didScroll = true;
+	});
+
+	setInterval(function() {
+		if (didScroll) {
+			hasScrolled();
+			didScroll = false;
+		}
+	}, 250);
+
+	function hasScrolled() {
+		var st = $(this).scrollTop();
+
+		// Make sure they scroll more than delta
+		if (Math.abs(lastScrollTop - st) <= delta)
+			return;
+
+		if (st > lastScrollTop && st > navbarHeight) {
+			$("#MagicMenu").slideUp("fast");
+		} else {
+			if (st + $(window).height() < $(document).height()) {
+				$("#MagicMenu").slideDown("fast");
+			}
+		}
+
+		lastScrollTop = st;
+	}
+
+       $(function() {
+           var header = $(".noscroll ");
+           $(window).scroll(function() {
+               var scroll = $(window).scrollTop();
+
+               if (scroll >= 50) {
+                   header.removeClass('noscroll ').addClass("scroll ");
+               } else {
+                   header.removeClass("scroll").addClass('noscroll ');
+               }
+           });
+       });
+
+	   $(document).ready(function() {
+
+		   $('a[href^="#"]').bind('click', function(scroller)
+			{
+				scroller.preventDefault();
+				var ziel = $(this).attr('href');
+				$('html,body').animate({scrollTop:$(ziel).offset().top-200}, 'slow');
+			});
+			var prevScrollpos = window.pageYOffset;
+			window.onscroll = function() {
+			  var currentScrollPos = window.pageYOffset;
+			  if (prevScrollpos > currentScrollPos) {
+			    document.getElementById("scrollup").classList.add("upscroll");
+				document.getElementById("scrollup").classList.remove("downscroll");
+			  } else {
+				document.getElementById("scrollup").classList.add("downscroll");
+				document.getElementById("scrollup").classList.remove("upscroll");
+			  }
+			  prevScrollpos = currentScrollPos;
+			}
+
+		});
+
+</script>
+
+{% if services.template.isCategory() %}
+<script type="text/javascript" async>
+
+$( document ).ready(function() {
+    if ($(".categoriegrid .filter-wrapper .card-columns>.card.dynamic").length < 8) {
+        $("#filterCollapse").remove();
+    }
+});
+</script>
+{% endif %}
+
+{% if services.template.isCategory() or services.template.isHome() or services.template.isSearch() %}
+<script async>
+	$(document).ready(function() {
+		$('.add-to-wish-list').tooltip('disable');
+
+		var hcID = "";
+		var targetUrl = "";
+		var recommendation = "";
+		$(".cat-item").each(function() {
+			var hcID = $(this).find(".hcItem").text().replace(/ /g,'');
+
+
+			var targetUrl = "https://sales.reiseschein.de/holidaycheck/prx_hotel.php?id=";
+			var completeUrl = targetUrl+hcID;
+			console.log(completeUrl);
+			if (completeUrl == "https://sales.reiseschein.de/holidaycheck/prx_hotel.php?id=" || completeUrl == "https://sales.reiseschein.de/holidaycheck/prx_hotel.php?id=0" ) {
+				$(this).find('#thumb-rec').remove();
+			} else {
+				$.ajax({
+		            type: "GET",
+		            url: completeUrl,
+		            cache: false,
+		            dataType: "xml",
+					context: this,
+		            success: function(xml) {
+						var recommendation = parseFloat($(xml).find('recommendation').text()).toFixed(0);
+						$(this).find('#thumb-rec .badge').html("<i class='fa fa-thumbs-up' aria-hidden='true'></i> "+recommendation+"%");
+		            }
+		        });
+			}
+		});
+	});
+</script>
+<script async>
+	$(document).ready(function() {
+
+        $(".product-list .cat-item").each(function() {
+            $(this).find(".valid").text($(this).find(".valid-temp").text());
+
+			if ( $(this).find(".persons-temp").text() < 1 ) {
+				$(this).find('.person-wrapper').removeClass("d-flex");
+				$(this).find('.person-wrapper').addClass("d-none");
+			} else {
+				$(this).find(".persons").text($(this).find(".persons-temp").text());
+			}
+			if ( $(this).find(".nights-temp").text() < 1 ) {
+				$(this).find('.night-wrapper').removeClass("d-flex");
+				$(this).find('.night-wrapper').addClass("d-none");
+			} else {
+				$(this).find(".nights").text($(this).find(".nights-temp").text());
+			}
+
+            $(this).find(".food").text($(this).find(".food-temp").text());
+            var nights = $(this).find(".nights-temp").text();
+            if (nights === "1") {
+                $(this).find(".nightsLabel").text("Nacht");
+            }
+            if ( $( this ).find(".d-none > img").hasClass( "icons-wlan-temp" ) ) {
+                $(this).find(".icons .icons-wlan").removeClass("d-none");
+            }
+            if ( $( this ).find(".d-none > img").hasClass( "icons-restaurant-temp" ) ) {
+                $(this).find(".icons .icons-restaurant").removeClass("d-none");
+            }
+            if ( $( this ).find(".d-none > img").hasClass( "icons-bar-temp" ) ) {
+                $(this).find(".icons .icons-bar").removeClass("d-none");
+            }
+            if ( $( this ).find(".d-none > img").hasClass( "icons-spa-temp" ) ) {
+                $(this).find(".icons .icons-spa").removeClass("d-none");
+            }
+            if ( $( this ).find(".d-none > img").hasClass( "icons-pool-temp" ) ) {
+                $(this).find(".icons .icons-pool").removeClass("d-none");
+            }
+            if ( $( this ).find(".d-none > img").hasClass( "icons-fitness-temp" ) ) {
+                $(this).find(".icons .icons-fitness").removeClass("d-none");
+            }
+            if ( $( this ).find(".d-none > img").hasClass( "icons-parkplatz-temp" ) ) {
+                $(this).find(".icons .icons-parkplatz").removeClass("d-none");
+            }
+            if ( $( this ).find(".d-none > img").hasClass( "icons-24h-temp" ) ) {
+                $(this).find(".icons .icons-24h").removeClass("d-none");
+            }
+            if ( $( this ).find(".d-none > img").hasClass( "icons-fahrstuhl-temp" ) ) {
+                $(this).find(".icons .icons-fahrstuhl").removeClass("d-none");
+            }
+            if ( $( this ).find(".d-none > img").hasClass( "icons-haustiere-temp" ) ) {
+                $(this).find(".icons .icons-haustiere").removeClass("d-none");
+            }
+
+            // var arr = $(this).find(".special-tags .badge-success span").text().split(",");
+            // $(this).find(".special-tags .badge-success span").text(arr[0]);
+        });
+
+
+
+    });
+</script>
+{% endif %}
+
+<script async>
+	$(document).ready(function() {
+
+        $(".product-list .cat-item, .single .cmp.cmp-product-thumb").each(function() {
+            var myVal = $(this).find(".special-tags .badge-success span").text();
+            myVal = parseFloat(myVal).toFixed(0);
+            $(this).find(".special-tags .badge-success span").text(myVal);
+        });
+
+        $('[data-toggle="tooltip"]').tooltip();
+
+		$(".home-first-list").each(function() {
+            $(this).owlCarousel({
+                autoHeight       : false,
+                dots             : false,
+                items            : 3,
+                lazyLoad         : false,
+                center           : true,
+                loop             : true,
+                margin           : 40,
+                mouseDrag        : false,
+                nav              : true,
+                navClass         : [
+                    "owl-single-item-nav left carousel-control list-control-special",
+                    "owl-single-item-nav right carousel-control list-control-special"
+                ],
+                navContainerClass: "",
+                navText          : [
+                    "<i class=\"owl-single-item-control fa fa-chevron-left\" aria-hidden=\"true\"></i>",
+                    "<i class=\"owl-single-item-control fa fa-chevron-right\" aria-hidden=\"true\"></i>"
+                ],
+                smartSpeed       : 350,
+
+                responsive : {
+                    // breakpoint from 0 up
+                    0 : {
+                        items            : 1,
+                        slideBy          : 1
+                    },
+                    // breakpoint from 768 up
+                    768 : {
+                        items            : 1,
+                        slideBy          : 1
+                    },
+					1200: {
+                        items: 3,
+                        slideBy: 1,
+						margin: 20
+                    },
+					1350: {
+						margin: 40
+                    }
+                },
+                onTranslated: function(elem){
+                    $(".lazy").lazyload();
+                }
+            });
+        });
+
+        $(".custom-list-item-carousel").each(function() {
+            $(this).owlCarousel({
+                autoHeight       : false,
+                dots             : false,
+                items            : 3,
+                lazyLoad         : false,
+                center           : true,
+                loop             : true,
+                margin           : 40,
+                mouseDrag        : false,
+                nav              : true,
+                navClass         : [
+                    "owl-single-item-nav left carousel-control list-control-special",
+                    "owl-single-item-nav right carousel-control list-control-special"
+                ],
+                navContainerClass: "",
+                navText          : [
+                    "<i class=\"owl-single-item-control fa fa-chevron-left\" aria-hidden=\"true\"></i>",
+                    "<i class=\"owl-single-item-control fa fa-chevron-right\" aria-hidden=\"true\"></i>"
+                ],
+                smartSpeed       : 350,
+
+                responsive : {
+                    // breakpoint from 0 up
+                    0 : {
+                        items            : 1,
+                        slideBy          : 1
+                    },
+                    // breakpoint from 768 up
+                    768 : {
+                        items            : 1,
+                        slideBy          : 1
+                    },
+                    1200: {
+                        items: 3,
+                        slideBy: 1
+                    }
+                },
+                onTranslated: function(elem){
+                    $(".lazy").lazyload();
+                }
+            });
+        });
+	});
+</script>
+
+<script async>
+$(document).ready(function() {
+	$(".cat-highlight").each(function() {
+		$(this).owlCarousel({
+                     autoHeight: false,
+                     dots: false,
+                     lazyLoad: false,
+                     loop: true,
+                     margin: 10,
+                     mouseDrag: true,
+                     nav: true,
+			navClass: [
+				"owl-single-item-nav left carousel-control list-control-special", "owl-single-item-nav right carousel-control list-control-special"
+			],
+			navContainerClass: "",
+			navText: [
+				"<i class=\"owl-single-item-control fa fa-chevron-left\" aria-hidden=\"true\"></i>",
+				"<i class=\"owl-single-item-control fa fa-chevron-right\" aria-hidden=\"true\"></i>"
+			],
+			smartSpeed: 350,
+			responsive: {
+				// breakpoint from 0 up
+				0: {
+					items: 1,
+					slideBy: 1
+				},
+				// breakpoint from 544 up
+				544: {
+					items: 2,
+					slideBy: 1
+				},
+				// breakpoint from 768 up
+				768: {
+					items: 3,
+					slideBy: 1
+				},
+                            1024: {
+					items: 4,
+					slideBy: 1
+				}
+			},
+			onTranslated: function(elem) {
+				$(".lazy").lazyload();
+			}
+		});
+	});
+	$(".big3cats").each(function() {
+		$(this).owlCarousel({
+                     autoHeight: false,
+                     dots: false,
+                     lazyLoad: false,
+                     loop: true,
+                     margin: 10,
+                     mouseDrag: true,
+                     nav: true,
+			navClass: [
+				"owl-single-item-nav left carousel-control list-control-special", "owl-single-item-nav right carousel-control list-control-special"
+			],
+			navContainerClass: "",
+			navText: [
+				"<i class=\"owl-single-item-control fa fa-chevron-left\" aria-hidden=\"true\"></i>",
+				"<i class=\"owl-single-item-control fa fa-chevron-right\" aria-hidden=\"true\"></i>"
+			],
+			smartSpeed: 350,
+			responsive: {
+				// breakpoint from 0 up
+				0: {
+					items: 1,
+					slideBy: 1
+				},
+				// breakpoint from 544 up
+				544: {
+					items: 3,
+					slideBy: 1
+				},
+				// breakpoint from 768 up
+				768: {
+					items: 3,
+					slideBy: 1
+				},
+                            1024: {
+					items: 3,
+					slideBy: 1
+				}
+			},
+			onTranslated: function(elem) {
+				$(".lazy").lazyload();
+			}
+		});
+	});
+});
+</script>
+
+
+{% if services.template.isItem() %}
+{% set weightNetG = item.documents[0].data.variation.weightNetG %}
+<script async>
+	$(document).ready(function() {
+
+		function areaExist(){
+			if ($('.availability-area .hld').children().length == 0) {
+				$('.availability-area').remove();
+			}
+			if ($('.gmap-area #map_canvas').children().length == 0) {
+				$('.gmap-area').remove();
+			}
+		}
+		setTimeout(areaExist, 2000);
+
+
+
+
+		function sameHeight(){
+			var rightSideHeight = $(".more-items").outerHeight() + $(".single-right-box-video").outerHeight();
+			var leftSideHeight = $("#item-container").outerHeight();
+			if (rightSideHeight > leftSideHeight){
+				$("#item-container").css({ "min-height": "calc(" + rightSideHeight + "px - 3rem)" });
+			}
+		}
+		setTimeout(sameHeight, 1000);
+
+		function topOffsetSingle(){
+			if ($(window).width() > 1199) {
+				var boxHeight = $(".single-right-box-topbar").outerHeight() + $(".single-right-box-content").outerHeight() + $(".more-items-head").outerHeight() + $(".single-breadcrumbs").outerHeight();
+                if ( $(".single-right-box-footer").hasClass("d-none") ) {
+                    $(".page-singleitem .single-right-box").css({ "top": "calc(-" + boxHeight + "px - 8.5rem)" });
+                }
+                else {
+                    $(".page-singleitem .single-right-box").css({ "top": "calc(-" + boxHeight + "px - 5.5rem)" });
+                }
+		    }
+			$(window).resize(function() {
+			  if ($(window).width() > 1199) {
+				  var boxHeight = $(".single-right-box-topbar").outerHeight() + $(".single-right-box-content").outerHeight() + $(".more-items-head").outerHeight() + $(".single-breadcrumbs").outerHeight();
+                  if ( $(".single-right-box-footer").hasClass("d-none") ) {
+                      $(".page-singleitem .single-right-box").css({ "top": "calc(-" + boxHeight + "px - 8.5rem)" });
+                  }
+                  else {
+                      $(".page-singleitem .single-right-box").css({ "top": "calc(-" + boxHeight + "px - 5.5rem)" });
+                  }
+			  }
+			});
+		}
+		setTimeout(topOffsetSingle, 1000);
+
+
+
+        $.ajax({
+            type: "GET",
+            url: "https://sales.reiseschein.de/holidaycheck/prx_hotel.php?id={{ weightNetG }}",
+            cache: false,
+            dataType: "xml",
+            success: function(xml) {
+                var countReviews = parseFloat($(xml).find('countReviews').text()).toFixed(0),
+                recommendation = parseFloat($(xml).find('recommendation').text()).toFixed(0),
+                averageRating = parseFloat($(xml).find('averageRating').text()).toFixed(1);
+
+                $('#countReviews').text(countReviews);
+
+                $('#recommendation').text(recommendation);
+                $('.scale.recommendation::before').css({ width : recommendation + '%' }); ;
+                $('head').append('<style>.scale.recommendation::before{width:' + recommendation + '%' + '}</style>');
+
+                $('#averageRating').text(averageRating);
+                $('head').append('<style>.scale.averageRating::before{width:' + averageRating / 6 * 100 + '%' + '}</style>');
+            }
+        });
+
+        {# rating #}
+        $.ajax({
+            type: "GET",
+            url: "https://sales.reiseschein.de/holidaycheck/prx_rating.php?id={{ weightNetG }}",
+            cache: false,
+            dataType: "xml",
+            success: function(xml) {
+                var hotelRating = parseFloat($(xml).find('hotelRating').find('overall').text()).toFixed(1);
+                $('#hotelRating').text(hotelRating);
+                $('head').append('<style>#hotelRatingRate::before{width:' + hotelRating / 6 * 100 + '%' + '}</style>');
+
+                var roomRating = parseFloat($(xml).find('roomRating').find('overall').text()).toFixed(1);
+                $('#roomRating').text(roomRating);
+                $('head').append('<style>#roomRatingRate::before{width:' + roomRating / 6 * 100 + '%' + '}</style>');
+
+                var serviceRating = parseFloat($(xml).find('serviceRating').find('overall').text()).toFixed(1);
+                $('#serviceRating').text(serviceRating);
+                $('head').append('<style>#serviceRatingRate::before{width:' + serviceRating / 6 * 100 + '%' + '}</style>');
+
+                var locationRating = parseFloat($(xml).find('locationRating').find('overall').text()).toFixed(1);
+                $('#locationRating').text(locationRating);
+                $('head').append('<style>#locationRatingRate::before{width:' + locationRating / 6 * 100 + '%' + '}</style>');
+
+                var foodRating = parseFloat($(xml).find('foodRating').find('overall').text()).toFixed(1);
+                $('#foodRating').text(foodRating);
+                $('head').append('<style>#foodRatingRate::before{width:' + foodRating / 6 * 100 + '%' + '}</style>');
+
+                var sportRating = parseFloat($(xml).find('sportRating').find('overall').text()).toFixed(1);
+                $('#sportRating').text(sportRating);
+                $('head').append('<style>#sportRatingRate::before{width:' + sportRating / 6 * 100 + '%' + '}</style>');
+
+                var hotelId = $(xml).find('hotelId').text();
+                $('.go-rate').attr('href', 'https://review.holidaycheck.com/?q=de/review/reiseschein/' + hotelId +'&utm_source=b2b&utm_medium=kooperation&utm_campaign=Reiseschein')
+            }
+        });
+    });
+</script>
+
+
+
+{% if themeItem.free16 %}
+<div class="hotelAddressData" style="display: none;">
+    {{ themeItem.free15|raw }}
+</div>
+<div class="hotel-address" style="display:none;">
+	{{ themeItem.free16|raw }}
+</div>
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAkZ0v5hLrsZcGn0uIEqm1zfxShSaDim24&libraries=places" async></script>
+<script type="text/javascript" async>
+	var addressData;
+	var map;
+	var mapIsLoaded = false;
+	var service;
+	var infoWindowArray = [];
+	var directionDisplay;
+	var directionsService = new google.maps.DirectionsService();
+	var zielAdresse;
+	var producerName = "{{ item.documents[0].data.item.manufacturer.name  }}";
+	var producerName2 = producerName;
+	producerName = producerName.replace( /&/g, "&amp;" ).replace( /</g, "&lt;" ).replace( />/g, "&gt;" );
+
+	function initializeGoogleMaps() {
+
+	  var geocoder = new google.maps.Geocoder();
+	  var fixed_addressData = addressData;
+
+	  listAddressData = addressData.split( "\n" );
+	  if ( listAddressData.length >= 3 ) {
+	    listAddressData.shift();
+	    fixed_addressData = listAddressData.join( " " );
+	  }
+
+	  geocoder.geocode( {
+	    address: fixed_addressData
+	  }, function ( locResult, status ) {
+
+	    if ( status != google.maps.GeocoderStatus.OK || locResult.length === 0 ) {
+	      console.warn( "Fehler: " + status + " - bei: " + fixed_addressData );
+	      return;
+	    }
+
+	    var lat1 = locResult[ 0 ].geometry.location.lat();
+	    var lng1 = locResult[ 0 ].geometry.location.lng();
+	    directionsDisplay = new google.maps.DirectionsRenderer();
+	    var latlng = new google.maps.LatLng( lat1, lng1 );
+	    zielAdresse = latlng;
+	    var mapOptions = {
+	      center: latlng,
+	      zoom: 14,
+	      mapTypeId: google.maps.MapTypeId.ROADMAP,
+	      mapTypeControl: true,
+	      scrollwheel: false,
+	    };
+	    map = new google.maps.Map( document.getElementById( "map_canvas" ), mapOptions );
+	    createMarker( latlng, "https://reiseschein.com/icons/multi-marker.svg", "{{ item.documents[0].data.texts.name1 }}", $( ".hotelAddressData" ).html(), true, "{{ item.documents[0].data.item.manufacturer.logo }}", null );
+	    directionsDisplay.setMap( map );
+	    directionsDisplay.setPanel( document.getElementById( "directionsPanel" ) );
+	  } );
+	}
+
+	function callback( results, status ) {
+	  if ( status == google.maps.places.PlacesServiceStatus.OK ) {
+	    for ( var i = 0; i < results.length; i++ ) {
+	      var place = results[ i ];
+	      var placePhoto = null;
+	      if ( results[ i ].photos !== undefined ) {
+	        placePhoto = results[ i ].photos[ 0 ].getUrl( {
+	          "maxWidth": 150,
+	          "maxHeight": 150
+	        } );
+	      }
+	      createMarker( results[ i ].geometry.location, results[ i ].icon, results[ i ].name, results[ i ].vicinity, false, results[ i ].icon, results[ i ].types, placePhoto );
+	    }
+	  }
+	}
+
+	function createMarker( latlng, markerImageUrl, markerName, markerStreet, needOpen, logoUrl, locationType, placePhoto ) {
+	  var placeLogo = null;
+	  if ( placePhoto !== null ) {
+	    placeLogo = placePhoto;
+	  } else {
+	    placeLogo = logoUrl;
+	  }
+
+	  var contentString = createInfoWindow( markerName, markerStreet, placeLogo );
+
+	  var infowindow = new google.maps.InfoWindow( {
+	    content: contentString,
+	    disableAutoPan: true,
+	    positionMiddleOfWindow: true
+	  } );
+	  infoWindowArray.push( infowindow );
+
+	  google.maps.event.addListener( infowindow, 'domready', function () {
+	    e = $( '.content-google-map' ).parent().parent().parent();
+	    h = parseFloat( e.height() );
+	    w = parseFloat( e.width() );
+	    map.panBy( 0, -40 );
+	  } );
+	  //Image Marker
+	  var pinIcon = new google.maps.MarkerImage(
+	    markerImageUrl,
+	    null,
+	    null,
+	    null,
+	    new google.maps.Size( 60, 60 )
+	  );
+
+	  var marker = new google.maps.Marker( {
+	    position: latlng,
+	    map: map,
+	    title: "",
+	    animation: google.maps.Animation.DROP,
+	    icon: pinIcon
+	  } );
+	  marker.setMap( map );
+	  if ( needOpen ) {
+	    infowindow.open( map, marker );
+	  } else {
+	    createOverview( markerName, markerImageUrl, "", marker, infoWindowArray[ infoWindowArray.length - 1 ], locationType );
+	  }
+	  google.maps.event.addListener( marker, 'click', function () {
+	    resetInfoWindow();
+	    infowindow.open( map, marker );
+	  } );
+	}
+
+	function resetInfoWindow() {
+	  if ( infoWindowArray ) {
+	    for ( var i in infoWindowArray ) {
+	      infoWindowArray[ i ].close();
+	    }
+	  }
+	}
+
+	function createOverview( typeName, imgUrl, type, markerTmp, infowindowTmp, locationType ) {
+	  var ovDiv = $( "<div />" );
+	  var ovImg = $( "<img />" );
+	  var ovName = $( "<p />" );
+	  $( ovDiv ).bind( "click", {
+	    pinfowindow: infowindowTmp,
+	    pMarker: markerTmp
+	  }, function ( event ) {
+	    $( ".active-standort" ).removeClass( "active-standort" );
+	    $( this ).addClass( "active-standort" );
+	    resetInfoWindow();
+	    event.data.pinfowindow.open( map, event.data.pMarker );
+	  } );
+	  $( ovImg ).attr( "src", imgUrl );
+	  $( ovImg ).addClass( "google-overview-img" );
+	  $( ovName ).addClass( "google-overview-name" );
+	  $( ovName ).text( typeName );
+	  $( ovDiv ).append( ovImg );
+	  $( ovDiv ).append( ovName );
+	  var isEsta = false;
+	  var isFood = false;
+	  $( locationType ).each( function ( data, key ) {
+	    if ( key == "establishment" && !isFood ) {
+	      isEsta = true;
+	    }
+	    if ( key == "restaurant" || key == "cafe" || key == "food" || key == "bar" ) {
+	      isEsta = false;
+	      isFood = true;
+	    }
+	  } );
+	  if ( isEsta ) {
+	    $( ".google-tab2-content" ).append( ovDiv );
+	  } else {
+	    $( ".google-tab1-content" ).append( ovDiv );
+	  }
+	}
+
+	function createInfoWindow( markerName, markerStreet, placeLogo ) {
+	  var tmpDiv = $( "<div />" );
+	  var contenDiv = $( "<div />" );
+	  $( contenDiv ).addClass( "content-google-map" );
+	  var headText = $( "<div />" );
+	  $( headText ).addClass( "firstHeading" );
+	  $( headText ).html( markerName );
+
+
+      {% if item.documents[0].data.item.manufacturer.logo != '' %}
+	  var logoDiv = $( "<div />" );
+	  $( logoDiv ).addClass( "siteNotice" );
+	  $( logoDiv ).html( '<img src="{{ item.documents[0].data.item.manufacturer.logo  }}" alt="' + producerName + '" title="' + producerName + '" />' );
+      {% endif %}
+
+
+	  var bodyContent = $( "<div />" );
+	  $( bodyContent ).addClass( "bodyContent" );
+	  $( bodyContent ).html( markerStreet );
+	  $( headText ).html( markerName );
+	  $( contenDiv ).append( headText );
+	  $( contenDiv ).append( logoDiv );
+	  $( contenDiv ).append( bodyContent );
+	  $( tmpDiv ).append( contenDiv );
+	  return $( tmpDiv ).html();
+	}
+
+	function calcRoute( start ) {
+	  var request = {
+	    origin: start,
+	    destination: zielAdresse,
+	    travelMode: google.maps.DirectionsTravelMode.DRIVING
+	  };
+	  directionsService.route( request, function ( response, status ) {
+	    if ( status == google.maps.DirectionsStatus.OK ) {
+	      directionsDisplay.setDirections( response );
+	    }
+	    var routeStatus = true;
+	    if ( status == 'ZERO_RESULTS' ) {
+	      alert( 'Keine Route gefunden.' );
+	      routeStatus = false;
+	    } else if ( status == 'UNKNOWN_ERROR' ) {
+	      alert( 'Ein Serverfehler ist aufgetreten.' );
+	      routeStatus = false;
+	    } else if ( status == 'OVER_QUERY_LIMIT' ) {
+	      alert( 'Zuviele Anfragen, bitte versuchen Sie es später erneut.' );
+	      routeStatus = false;
+	    } else if ( status == 'NOT_FOUND' ) {
+	      alert( 'Die Zieladresse gibt es nicht oder konnte nicht ermittelt werden.' );
+	      routeStatus = false;
+	    } else if ( status == 'INVALID_REQUEST' ) {
+	      alert( 'Die Zieladresse gibt es nicht oder konnte nicht ermittelt werden.' );
+	      routeStatus = false;
+	    }
+	    if ( routeStatus ) {
+	      $( ".show-route-information" ).show();
+	    } else {
+	      $( ".show-route-information" ).hide();
+	    }
+	  } );
+	}
+</script>
+
+<script type="text/javascript" async>
+$(function() {
+	$( ".show-route-information" ).click( function () {
+	  $( "#directionsPanel" ).toggle( "fade" );
+	} );
+	/* GOOGLE MAPS END */
+
+	$( ".find-route" ).click( function () {
+		console.log("click");
+	  if ( $( ".startort-txt" ).val().length !== 0 ) {
+	    var geocoder = new google.maps.Geocoder();
+	    geocoder.geocode( {
+	      address: $( ".startort-txt" ).val()
+	    }, function ( locResult ) {
+	      if ( locResult.length > 0 ) {
+	        var lat1 = locResult[ 0 ].geometry.location.lat();
+	        var lng1 = locResult[ 0 ].geometry.location.lng();
+	        var latlng = new google.maps.LatLng( lat1, lng1 );
+	        calcRoute( latlng );
+	      } else {
+	        alert( "Startort wurde nicht gefunden" );
+	      }
+	    } );
+	  }
+	} );
+
+	addressData = $.trim($(".hotel-address").html());
+
+    if(!mapIsLoaded){
+        initializeGoogleMaps();
+        mapIsLoaded = true;
+    }
+});
+</script>
+{% endif %}
+{% endif %}
+
+{% if not services.template.isHome() %}
+<script async>
+	function closeAll(event=null){
+		var isFilter = event==null ? false : $(event.target).parents(".card").length>0;
+		if (!isFilter){
+			console.log("closeAll");
+			if( $("#filterCollapse .card-columns .card .h3.active").length>0 ){
+				$("#filterCollapse .card-columns .card .h3.active").removeClass("active");
+				setFilters();
+			}
+			document.removeEventListener("click", closeAll, false);
+		}
+	}
+	function setActiveFilters(){
+		$("#filterCollapse .card-columns .card").removeClass("active");
+		$("#filterCollapse .card-columns .card").find("input:checked").each(function(){
+			$(this).parents(".card").addClass("active");
+		});
+	}
+	function closeOthers(){
+		if( $("#filterCollapse .card-columns .card .h3.active").length>0 ){
+
+			$("#filterCollapse .card-columns .card .h3").removeClass("active");
+		}
+	}
+	function resetAll(card){
+		console.log("clear", this);
+		$(card).find("input:checked").trigger("click");
+	}
+	function setFilters(){
+		if(!vueApp.$children.find(o => {return o.$options.template === "#vue-item-filter-list"} ).isInitialFacetSelectionActive){
+			vueApp.$store.dispatch("loadItemList");
+		}
+	}
+	$(function() {
+		if($(".filter-wrapper").length>0){
+			console.log("PLIM FILTERS", $(".card").find(".h3"));
+			$(".card").find(".h3").click(function(){
+				if($(this).hasClass("active")){
+					closeAll();
+				}else{
+					closeOthers();
+					$(this).toggleClass("active");
+					document.addEventListener("click", closeAll, false);
+				}
+			});
+			setActiveFilters();
+			$("a.filter-clear").click(function(){
+				resetAll($(this).parents(".card"));
+			});
+			$("a.filter-save").click(function(){
+				setFilters();
+			});
+		}
+
+		if($("#price-range-slider").length){
+			var sliderRange = $("#price-range-slider").slider({});
+			sliderRange.on("slide", function(ev){
+				var min = $(this).attr("data-value").split(",")[0];
+				var max = $(this).attr("data-value").split(",")[1];
+
+				$(".card.price .input-group.min .val").html(min);
+				$(".card.price .input-group.max .val").html(max);
+			});
+			sliderRange.on("slideStop", function(ev){
+				var min = $(this).attr("data-value").split(",")[0];
+				var max = $(this).attr("data-value").split(",")[1];
+
+				vueApp.$store.dispatch("selectPriceFacet", { priceMin: min, priceMax: max });
+				vueApp.$store.dispatch("loadItemList");
+			});
+		}
+	});
+</script>
+{% endif %}

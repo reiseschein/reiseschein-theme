@@ -1,0 +1,152 @@
+
+
+<div class="single-right-box-topbar px-4 py-3 d-flex justify-content-between">
+    <div class="single-right-box-topbar-left">
+        <span class="stars stars_{{ stars }}"></span>
+    </div>
+    <div class="single-right-box-topbar-right">
+        <span data-toggle="tooltip" data-placement="top" :title="currentVariation.variation.number">Artikel ID ${ currentVariation.item.id }</span>
+        <span class="pipe mx-2 pr-1"></span>
+        <add-to-wish-list :variation-id="currentVariation.variation.id"></add-to-wish-list>
+    </div>
+</div>
+
+<div class="single-right-box-content p-2 p-md-4">
+    <h2 class="title">
+            ${ currentVariation | itemName }
+    </h2>
+    <hr class="my-3" />
+    <div class="d-flex justify-content-between align-items-center">
+        <div class="single-info-box-left small">
+            {% if valid != '' %}<span class="d-block mb-2"><i class="fa fa-calendar mr-2" aria-hidden="true"></i> {{ valid }} Monate Gültigkeit</span>{% endif %}
+            {% if persons != '' %}<span class="d-block mb-2"><i class="fa fa-users mr-2" aria-hidden="true"></i> inkl. {{ persons }} Personen</span>{% endif %}
+            {% if nights != '' %}<span class="d-block mb-2"><i class="fa fa-bed mr-2" aria-hidden="true"></i> inkl. {{ nights }} Nächte {% if food != '' %}+ {{ food }}{% endif %}</span>{% endif %}
+            <span v-if="currentVariation.filter.hasManufacturer" class="d-block"><i class="fa fa-building mr-2" aria-hidden="true"></i> ${ currentVariation.item.manufacturer.name }</span>
+        </div>
+        <div class="single-info-box-right">
+            <img :src="currentVariation.item.manufacturer.logo" :alt="currentVariation.item.manufacturer.name" class="img-fluid">
+        </div>
+    </div>
+
+    <hr class="my-3" />
+
+    <slot name="before-price"></slot>
+
+    <span class="price h1 d-flex d-md-block justify-content-between">
+        <span :content="currentVariation.prices.default.price.value">
+            ${ variationTotalPrice | currency(currentVariation.prices.default.currency) }
+        </span>
+        <span :content="currentVariation.prices.default.currency"></span>
+        {% if pricesArray[3] %}{% if pricesArray[3] == 100 %}<sup class="ml-3 mt-2 mt-md-0"><span class="badge badge-danger">NEU</span></sup>{% else %}{% set priceRabatt = 100 - pricesArray[3] %}<sup class="ml-3 mt-2 mt-md-0"><span class="badge badge-danger">-{{ priceRabatt }}&percnt;<sup><sup>2</sup></sup></span></sup>{% endif %}{% endif %}
+    </span>
+    {% if persons > 1 and pricesArray[2] %}
+        <span class="text-muted">
+            nur {{ pricesArray[2]|number_format(2, ',', '.') }} <span>&euro;</span> pro Person
+            {% if ('item.recommendedPrice' in itemData or 'all' in itemData) %}
+                <span class="crossprice" v-if="currentVariation.prices.rrp && currentVariation.prices.rrp.unitPrice.value > 0 && currentVariation.prices.rrp.unitPrice.value > currentVariation.prices.default.unitPrice.value">&nbsp;/&nbsp;</span>
+            {% endif %}
+        </span>
+    {% endif %}
+    {% if ('item.recommendedPrice' in itemData or 'all' in itemData) %}
+        <span class="crossprice" v-if="currentVariation.prices.rrp && currentVariation.prices.rrp.unitPrice.value > 0 && currentVariation.prices.rrp.unitPrice.value > currentVariation.prices.default.unitPrice.value">
+            <span class="text-muted">Wert: ${ currentVariation.prices.rrp.unitPrice.formatted }<sup>1</sup></span>
+        </span>
+    {% endif %}
+
+    <slot name="after-price"></slot>
+
+    <div class="row my-3">
+        <div class="w-100">
+            <slot name="before-add-to-basket"></slot>
+        </div>
+
+        <div class="col-12 my-3">
+            {{ AddToBasket.printVueComponent(
+                "currentVariation",
+                false,
+                true,
+                {
+                    ":missing-order-properties":"variationMissingProperties",
+                    ":is-variation-selected": "isVariationSelected && currentVariation.filter.isSalable",
+                    ":has-price": "currentVariation | hasItemDefaultPrice"
+                }
+            ) }}
+        </div>
+
+        <div class="w-100">
+            <slot name="after-add-to-basket"></slot>
+        </div>
+    </div>
+
+    <!-- ./ITEM DETAIL -->
+
+    <slot name="additional-content-after-add-to-basket"></slot>
+
+    <div class="meta-small-box d-flex flex-wrap flex-md-nowrap justify-content-between align-items-center">
+        <div class="tel-order">
+            <button class="btn btn-primary btn-sm text-uppercase small btn-block" data-toggle="modal" data-target="#telOrder"><i class="fa fa-phone" aria-hidden="true"></i> Telefonische Bestellung</button>
+        </div>
+        <span class="vat small text-muted text-center text-sm-right">
+            Preis inkl. MwSt. zzgl. <a href="/pages/versand-und-kosten/" target="_blank" title="Versand">Versand</a><br />
+            24h eMail Versand / per Post
+        </span>
+    </div>
+
+    <slot name="additional-content-after-vat"></slot>
+</div>
+
+<div class="single-right-box-footer {% if moreItemsArray[0] == "0" %}d-none{% endif %}">
+    <div class="more-items-head text-center p-3 bg-dark">
+        <strong class="text-light text-uppercase"><i class="fa fa-chevron-down text-primary mr-3" aria-hidden="true"></i> <a title="Weitere Optionen" href="#item-container">Weitere Optionen</a> <i class="fa fa-chevron-down text-primary ml-3" aria-hidden="true"></i></strong>
+    </div>
+    <div class="arrow-wrapper"></div>
+    <div class="more-items">
+        {% if moreItemsArray[0] != "0" %}
+            {% for a in moreItemsArray %}
+                {% set moreItem = services.item.getItem( a ) %}
+                <a class="more-item p-3" href="{{ moreItem.documents[0].data.texts[0].urlPath }}_{{ moreItem.documents[0].data.item.id }}_{{ moreItem.documents[0].id }}" title="{{ moreItem.documents[0].data.texts[0].name1 }}">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="more-item-left d-flex flex-column">
+                            {% set xNights = '' %}
+                            {% set xFood = '' %}
+
+                            {% set freevar = getFree(a) %}
+                            {% set freevarArray = freevar.free17|split('[') %}
+
+                            {% for free in freevarArray %}
+                                {% if free starts with '4]' %}{% set xNights = free[2:] %}{% endif %}
+                                {% if free starts with '5]' %}{% set xFood = free[2:] %}{% endif %}
+                            {% endfor %}
+
+
+                            {% set xDays = xNights + 1 %}
+                            <span class="more-item-title h4"><strong>{{ xDays }} Tage {% if xFood != '' %}inkl. {{ xFood }}{% endif %}</strong></span>
+
+                            {% set name3 = moreItem.documents[0].data.texts[0].name3|split('~~~ ', 3) %}
+                            {% set name4 = name3[1] %}
+                            {% set string = name4|split('-') %}
+                            <span class="text-muted">{{ string[1] }}</span>
+                        </div>
+                        <div class="more-item-center">
+                            <i class="fa fa-chevron-right fa-2x" aria-hidden="true"></i>
+                        </div>
+                        <div class="more-item-right">
+                            <span class="more-item-price">
+                                {% for i in moreItem.documents[0].data.salesPrices if i.id == 1 %}
+                                    {{ i.price|number_format(2, ',', '.') }} <span>&euro;</span>
+                                {% endfor %}
+                            </span>
+                        </div>
+                    </div>
+                </a>
+            {% endfor %}
+        {% endif %}
+    </div>
+</div>
+
+
+<div class="single-right-box-video">
+    <button class="btn btn-dark btn-block text-uppercase py-0" data-toggle="modal" data-target="#erklaervideo">
+      <i class="fa fa-play-circle fa-4x" aria-hidden="true"></i> <strong class="display-4 font-weight-bold">Reiseschein einfach erklärt!</strong>
+    </button>
+</div>

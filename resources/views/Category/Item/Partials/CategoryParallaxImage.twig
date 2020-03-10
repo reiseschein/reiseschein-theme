@@ -1,0 +1,30 @@
+{% set categoryDescriptionTop = ceresConfig.item.showCategoryDescriptionTop %}
+
+<div class="container-max">
+       <div class="parallax-img-container">
+           <div class="parallax-img-container-inner">
+               <div class="parallax-custom"
+               {% if category.details[0].imagePath is not empty %} style="background-image: url(/documents/{{ category.details[0].imagePath }});"
+               {% else %} data-plimm="random" style="background-image: url(https://cdn02.plentymarkets.com/xlmtl39g8qjd/frontend/Random-Bilder-Kategorien/{{ random(2) }}.jpg);"
+               {% endif %}></div>
+
+
+
+
+
+               <div class="container-max">
+                   <div>
+                       <div class="parallax-text-container">
+                           <h1 class="category-title mb-3">{{ category.details[0].name | raw }}</h1>
+                           {% if categoryDescriptionTop == "description1" or categoryDescriptionTop == "both" %}
+                               <div class="category-description mb-3">{{ category.details[0].description | raw }}</div>
+                           {% endif %}
+                           {% if categoryDescriptionTop == "description2" or categoryDescriptionTop == "both" %}
+                               <div class="category-description mb-3">{{ category.details[0].description2 | raw }}</div>
+                           {% endif %}
+                       </div>
+                   </div>
+               </div>
+           </div>
+       </div>
+</div>
