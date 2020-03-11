@@ -18,7 +18,7 @@
     <hr class="my-3" />
     <div class="d-flex justify-content-between align-items-center">
         <div class="single-info-box-left small">
-            {% if valid != '' %}<span class="d-block mb-2"><i class="fa fa-calendar mr-2" aria-hidden="true"></i> {{ valid }} {% if valid == '36' %} Monate Gültigkeit{% endif %}</span>{% endif %}
+            {% if valid != '' %}<span class="d-block mb-2"><i class="fa fa-calendar mr-2" aria-hidden="true"></i> {{ valid }} {% if valid == '36' | '12' | '24' %} Monate Gültigkeit{% endif %}</span>{% endif %}
             {% if persons != '' %}<span class="d-block mb-2"><i class="fa fa-users mr-2" aria-hidden="true"></i> inkl. {{ persons }} Personen</span>{% endif %}
             {% if nights != '' %}<span class="d-block mb-2"><i class="fa fa-bed mr-2" aria-hidden="true"></i> inkl. {{ nights }} Nächte {% if food != '' %}+ {{ food }}{% endif %}</span>{% endif %}
             <span v-if="currentVariation.filter.hasManufacturer" class="d-block"><i class="fa fa-building mr-2" aria-hidden="true"></i> ${ currentVariation.item.manufacturer.name }</span>
